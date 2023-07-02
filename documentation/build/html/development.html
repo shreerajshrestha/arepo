@@ -1,0 +1,198 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Code development &#8212; Arepo 1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Related codes" href="migration.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="code-development">
+<h1>Code development<a class="headerlink" href="#code-development" title="Permalink to this headline">¶</a></h1>
+<p>Scientific software development is a crucial aspect of computational
+(astro-)physics.  With the progess made over the past decades,
+numerical methods as well as implementations have evolved and
+increased in complexity. The scope of simulation codes has increased
+accordingly, such that the question on how to organize development
+becomes important for further scientific progress.</p>
+<p>This version of Arepo is intended as a basis, providing an efficient
+code structure and state of the art numerical techniques for gravity
+and hydrodynamics. The code is completely documented and should allow
+computational astrophysicists to develop their own specialized modules
+on top of it. Practically, this is best done by hosting an own
+repository for the development, which is occasonally updated from the
+main repository to include latest bugfixes. For this workflow to work
+properly, it is helpful to keep the code-base relatively static. For
+this reason</p>
+<dl class="simple">
+<dt><strong>the base version of the code is not meant to be extended in</strong></dt><dd><p><strong>functionality.</strong></p>
+</dd>
+</dl>
+<p>This means that only bugfixes as well as updates in the documentation
+and examples will be included in revisions of this public release.</p>
+<section id="issue-reporting">
+<h2>Issue reporting<a class="headerlink" href="#issue-reporting" title="Permalink to this headline">¶</a></h2>
+<p>A code of the scope of Arepo will inevitably have a number of issues
+and so far undiscovered bugs.  Detection of all issues is very
+complicated and time-consuming work. This means in practice that we
+rely on users to actually report all bugs and issues they come across,
+helping us to improve the quality of the code. We therefore encourage
+users to report all issues they have, including things that remain
+unclear after reading the documentation. This way we hope to
+constantly improve the qualtiy of the code in all its aspects.</p>
+<p>To organize this, we set up a code support forum
+(www.arepo-code.org/forums/forum/arepo-forum) which is publicly
+visible. To create posts on this forum, a registration with
+admin-approval is required. We encourage users to sign up under
+www.arepo-code.org/register and make use of the forum whenever they
+have problems.</p>
+<p>Issues reported in the forum will then be confirmed by one of the
+authors and added to the repository issue tracker, which serves as a
+to-do list for bug fixes and improvements to the code. Therefore, if a
+problem occurs, the first thing to check is whether there already
+exists an open issue, i.e. whether this is a known and confirmed
+problem.</p>
+<dl class="simple">
+<dt><strong>Please whenever possible use the support forum instead of</strong></dt><dd><p><strong>contacting the authors by email.</strong></p>
+</dd>
+<dt><strong>We encourage experienced users to provide help and answer some</strong></dt><dd><p><strong>of the open questions on this forum.</strong></p>
+</dd>
+</dl>
+</section>
+<section id="code-extensions">
+<h2>Code extensions<a class="headerlink" href="#code-extensions" title="Permalink to this headline">¶</a></h2>
+<p>Extensions should be hosted in separate repositories or branches of
+the main repository.  We highly welcome such extensions and encourage
+developers to make them publicly available (under GNU GPL v3). While
+this can be done independently of the authors, we would encourage
+developers to inform the authors once there is a publicly available
+module they are willing to share, in order to have a list of available
+extensions on the code homepage.</p>
+<p>Some guidelines for code extensions and new modules:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Strive for modularity</p></li>
+<li><p>Minimize the number of changes in existing source code files to a
+few function calls and structured variables within existing
+elements.</p></li>
+<li><p>The source code of a new modue should largely be in separate
+(i.e. new) files.</p></li>
+<li><p>Document the module</p></li>
+<li><p>All parameter and config-options should be clearly explained in
+this documentation.  Feel free to add an addional page to this
+documentation explaining how your module works.</p></li>
+<li><p>Document what each function does in the source code.</p></li>
+<li><p>The Template-Config.sh file should have a short explanation for
+each added flag.</p></li>
+<li><p>Verification and examples</p></li>
+<li><p>If possible, create one or more addional examples illustrating and
+testing the module.</p></li>
+</ul>
+</div></blockquote>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Arepo</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="running.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simtypes.html">Simulation examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config-options.html">Code Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameterfile.html">Parameterfile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="snapshotformat.html">Simulation output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="diagnosticfiles.html">Diagnostic output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="migration.html">Related codes</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Code development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#issue-reporting">Issue reporting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#code-extensions">Code extensions</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="migration.html" title="previous chapter">Related codes</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Max-Planck Institute for Astrophysics.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/development.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

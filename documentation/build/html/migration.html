@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Related codes &#8212; Arepo 1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Code development" href="development.html" />
+    <link rel="prev" title="Diagnostic output" href="diagnosticfiles.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="related-codes">
+<h1>Related codes<a class="headerlink" href="#related-codes" title="Permalink to this headline">¶</a></h1>
+<p>The general high-level code structure of Arepo is quite similar to the
+Gadget code, but with significant changes and improvements. However,
+keeping in mind that the code architecture originates from an
+Tree-PM-SPH code can help to understand why certain things are done in
+certain ways.</p>
+<p>One of the obvious signs of this are the names of some global
+structures and functions. For example the array holding the
+information for gas cells is called SphP. Another example would be the
+routines in <code class="docutils literal notranslate"><span class="pre">src/init/density.c</span></code>, which used to be an SPH density
+calculation, but is now only used for an estimate for the typical
+distance to neighbouring cells. Another aspect is the presence of the
+neighbour tree, a search-tree structure on gas cells. In practice this
+means that many of the routines that depend on the state of
+neighbouring cells, including sub-grid feedback models etc., can be
+based on this neighbour search. This makes it possible to port these
+models relatively easily from earlier versions of Gadget to Arepo.</p>
+<p>However, it is important to also realize that routines written for the
+Gadget code will in general not work without some porting adjustments
+when inserted in to Arepo. We thus encourage developers to carefully
+test that their implementations still have the intended effect when
+such a porting is done.  Apart from the differences in implementation,
+it is also important to realize that a grid-based finite volume scheme
+can react differently to certain sub-grid implementations than a
+particle-based approach.</p>
+<section id="differences-to-the-development-version">
+<h2>Differences to the development Version<a class="headerlink" href="#differences-to-the-development-version" title="Permalink to this headline">¶</a></h2>
+<p>This public version of Arepo was branched off from the development
+version in November 2017, and then Rainer Weinberger substantially cut
+it down, cleaned it up and completed the documentation. The main
+reason for doing this was to provide a code to the community that
+researchers are able to understand and use without the need of an
+extensive introduction by one of the authors. We believe that the
+public version, which is better documented at a developer level, also
+provides a better starting point for new developments.</p>
+<p>The general idea for this public verson was to preserve the
+well-tested code with a limited number of changes. However, some
+compile-time options have been eliminated and to recover the same
+running mode <strong>in the development version of Arepo</strong>, the following
+compile-time flags need to be set in <cite>Config.sh</cite></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">PERIODIC</span></code> (has become obsolete over the years)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VORONOI</span></code> (the development version also has an AMR mode)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VORONOI_DYNAMIC_UPDATE</span></code> (in practice now a default)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">AUTO_SWAP_ENDIAN_READIC</span></code> (only relevant for file formats 1 and 2)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CHUNKING</span></code></p></li>
+<li><p>the switch <code class="docutils literal notranslate"><span class="pre">EXACT_GRAVITY_FOR_PARTICLE_TYPE</span></code> automatically
+activates <code class="docutils literal notranslate"><span class="pre">NO_SELFGRAVITY_TYPE</span></code>, <code class="docutils literal notranslate"><span class="pre">NO_GRAVITY_TYPE</span></code> and
+<code class="docutils literal notranslate"><span class="pre">EXACT_GRAVITY_REACTION</span></code> (see src/main/allvars.h) in the public
+version. This is not the case in the development version where all
+these flags need to be set individually in Config.sh.</p></li>
+</ul>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Arepo</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="running.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simtypes.html">Simulation examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config-options.html">Code Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameterfile.html">Parameterfile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="snapshotformat.html">Simulation output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="diagnosticfiles.html">Diagnostic output</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Related codes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#differences-to-the-development-version">Differences to the development Version</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Code development</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="diagnosticfiles.html" title="previous chapter">Diagnostic output</a></li>
+      <li>Next: <a href="development.html" title="next chapter">Code development</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Max-Planck Institute for Astrophysics.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/migration.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

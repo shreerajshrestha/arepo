@@ -1,0 +1,1007 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Code Configuration &#8212; Arepo 1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Parameterfile" href="parameterfile.html" />
+    <link rel="prev" title="Simulation examples" href="simtypes.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="code-configuration">
+<h1>Code Configuration<a class="headerlink" href="#code-configuration" title="Permalink to this headline">¶</a></h1>
+<section id="basic-operation-mode">
+<h2>Basic operation mode<a class="headerlink" href="#basic-operation-mode" title="Permalink to this headline">¶</a></h2>
+<p>The default running mode (without any of the flags active) is 3d with
+6 particle types; type 0 is always gas; types &gt;0 are only
+gravitationally interacting.</p>
+<p><strong>NTYPES=6</strong></p>
+<p>The number of particle types used. Minimum: 6.</p>
+<hr class="docutils" />
+<p><strong>TWODIMS</strong></p>
+<p>Simulation in 2d. Z coordinates and velocities are set to zero after
+reading in initial conditions.</p>
+<hr class="docutils" />
+<p><strong>ONEDIMS</strong></p>
+<p>Simulation in 1d. Y and Z coordinates and velocities are set to zero
+after reading in initial conditions. For one dimensional
+simulations, refinement and derefinement is not supported.
+If this flag is active, the code is not MPI parallel.</p>
+<hr class="docutils" />
+<p><strong>ONEDIMS_SPHERICAL</strong></p>
+<p>Spherically symmetric 1d simulation. Use together with <code class="docutils literal notranslate"><span class="pre">ONEDIMS</span></code>.
+The first dimension is used as the radial coordinate.</p>
+</section>
+<hr class="docutils" />
+<section id="computational-box">
+<h2>Computational box<a class="headerlink" href="#computational-box" title="Permalink to this headline">¶</a></h2>
+<p>The default running mode (without any of the flags active) is a cubic
+box with periodic boundary conditions</p>
+<p><strong>LONG_X=10.0</strong></p>
+<p>These options can be used to distort the simulation cube along the
+given direction with the given factor into a parallelepiped of
+arbitrary aspect ratio. The box size in the given direction increases
+by the factor given (e.g. if <code class="docutils literal notranslate"><span class="pre">Boxsize</span></code> is set to 100 and
+<code class="docutils literal notranslate"><span class="pre">LONG_X=4</span></code> is set the simulation domain extends from 0 to 400 along
+X and from 0 to 100 along Y and Z.)</p>
+<hr class="docutils" />
+<p><strong>LONG_Y=2.0</strong></p>
+<p>Stretches the y extent of the computational box by a given factor.</p>
+<hr class="docutils" />
+<p><strong>LONG_Z=10.0</strong></p>
+<p>Stretches the z extent of the computational box by a given factor.</p>
+<hr class="docutils" />
+<p><strong>REFLECTIVE_X=1</strong></p>
+<p>Boundary conditions in the x direction. 1: Reflective, 2:
+Inflow/Outflow; not set: periodic</p>
+<hr class="docutils" />
+<p><strong>REFLECTIVE_Y=1</strong></p>
+<p>Boundary conditions in y direction. 1: Reflective, 2: Inflow/Outflow;
+not set: periodic</p>
+<hr class="docutils" />
+<p><strong>REFLECTIVE_Z=1</strong></p>
+<p>Boundary conditions in z direction. 1: Reflective, 2: Inflow/Outflow;
+not set: periodic</p>
+</section>
+<hr class="docutils" />
+<section id="hydrodynamics">
+<h2>Hydrodynamics<a class="headerlink" href="#hydrodynamics" title="Permalink to this headline">¶</a></h2>
+<p>The default mode is: <code class="docutils literal notranslate"><span class="pre">GAMMA=5/3</span></code> ideal hydrodynamics</p>
+<p><strong>NOHYDRO</strong></p>
+<p>No hydrodynamics calculation. Note that simply not including any type
+0 particles has the same effect.</p>
+<hr class="docutils" />
+<p><strong>GAMMA=1.4</strong></p>
+<p>Adiabatic index of gas. 5/3 if not set.</p>
+<hr class="docutils" />
+<p><strong>ISOTHERM_EQS</strong></p>
+<p>Isothermal gas. Code uses an isothermal Riemann-solver.</p>
+<hr class="docutils" />
+<p><strong>PASSIVE_SCALARS=3</strong></p>
+<p>Number of passive scalar fields advected with fluid (default: 0).</p>
+<hr class="docutils" />
+<p><strong>NO_SCALAR_GRADIENTS</strong></p>
+<p>Disables time and spatial extrapolation for passive scalar fields. Use
+only if you know why you are doing this.</p>
+</section>
+<hr class="docutils" />
+<section id="magnetohydrodynamics">
+<h2>Magnetohydrodynamics<a class="headerlink" href="#magnetohydrodynamics" title="Permalink to this headline">¶</a></h2>
+<p>By default, code only computes hydrodynamics. Note that for comparison
+of MHD and hydrodynamical runs, it is sometimes useful to keep the MHD
+settings active and to initialize the magnetic field to zero
+everywhere. The equations of ideal MHD ensure that the magnetic field
+stays exactly zero throughout the calculation.</p>
+<p><strong>MHD</strong></p>
+<p>Master switch for magnetohydrodynamics.</p>
+<hr class="docutils" />
+<p><strong>MHD_POWELL</strong></p>
+<p>Powell div(B) cleaning scheme for magnetohydrodynamics.</p>
+<hr class="docutils" />
+<p><strong>MHD_POWELL_LIMIT_TIMESTEP</strong></p>
+<p>Additional timestep constraint due to Powell cleaning scheme.</p>
+<hr class="docutils" />
+<p><strong>MHD_SEEDFIELD</strong></p>
+<p>Uniform magnetic seed field of specified orientation and strength set
+up after reading in IC.</p>
+</section>
+<hr class="docutils" />
+<section id="riemann-solver">
+<h2>Riemann solver<a class="headerlink" href="#riemann-solver" title="Permalink to this headline">¶</a></h2>
+<p>By default, an iterative, exact (hydrodynamics) Riemann solver is
+used. If one of the flags below is active, this is changed. Only one
+Riemann solver can be active.</p>
+<p><strong>RIEMANN_HLLC</strong></p>
+<p>HLLC approximate Riemann solver.</p>
+<hr class="docutils" />
+<p><strong>RIEMANN_HLLD</strong></p>
+<p>HLLD approximate Riemann solver (required for MHD).</p>
+</section>
+<hr class="docutils" />
+<section id="mesh-motion">
+<h2>Mesh motion<a class="headerlink" href="#mesh-motion" title="Permalink to this headline">¶</a></h2>
+<p>The default mode is a moving mesh.</p>
+<p><strong>VORONOI_STATIC_MESH</strong></p>
+<p>Assumes the mesh to be static, i.e. to not change with time. The
+vertex velocities of all mesh-generating points is set to zero and
+domain decomposition is disabled.</p>
+<hr class="docutils" />
+<p><strong>VORONOI_STATIC_MESH_DO_DOMAIN_DECOMPOSITION</strong></p>
+<p>Enables domain decomposition together with <code class="docutils literal notranslate"><span class="pre">VORONOI_STATIC_MESH</span></code>
+(which is otherwise then disabled), in case non-gas particle types
+exist and the use of domain decompositions is desired. Note that on
+one hand it may be advantageous in case the non-gas particles mix well
+or cluster strongly, but on the other hand the mesh construction that
+follows the domain decomposition is slow for a static mesh, so whether
+or not using this new flag is overall advantageous depends on the
+problem.</p>
+<hr class="docutils" />
+<p><strong>REGULARIZE_MESH_CM_DRIFT</strong></p>
+<p>Mesh regularization. Move mesh generating point towards center of mass
+to make cells rounder.</p>
+<hr class="docutils" />
+<p><strong>REGULARIZE_MESH_CM_DRIFT_USE_SOUNDSPEED</strong></p>
+<p>Limits mesh regularization speed by local sound speed.</p>
+<hr class="docutils" />
+<p><strong>REGULARIZE_MESH_FACE_ANGLE</strong></p>
+<p>Uses maximum face angle as roundness criterion in mesh regularization.</p>
+</section>
+<hr class="docutils" />
+<section id="refinement">
+<h2>Refinement<a class="headerlink" href="#refinement" title="Permalink to this headline">¶</a></h2>
+<p>By default, there is no refinement and derefinement. But if enabled,
+and unless set otherwise, the criterion for refinement/derefinement is
+to maintain a cell target mass.</p>
+<p><strong>REFINEMENT_SPLIT_CELLS</strong></p>
+<p>Allows refinement.</p>
+<hr class="docutils" />
+<p><strong>REFINEMENT_MERGE_CELLS</strong></p>
+<p>Allows derefinement.</p>
+<hr class="docutils" />
+<p><strong>REFINEMENT_VOLUME_LIMIT</strong></p>
+<p>Limits the volume of cells and the maximum volume difference between
+neighboring cells.</p>
+<hr class="docutils" />
+<p><strong>JEANS_REFINEMENT</strong></p>
+<p>Refinement criterion to ensure resolving the Jeans length of cells.</p>
+<hr class="docutils" />
+<p><strong>REFINEMENT_HIGH_RES_GAS</strong></p>
+<p>Limits the dynamical (de-)refinements of cells to cells which are
+either already present in the ICs or are created with
+<code class="docutils literal notranslate"><span class="pre">GENERATE_GAS_IN_ICS</span></code> from type 1 particles. This adds an additional
+integer quantity <code class="docutils literal notranslate"><span class="pre">AllowRefinement</span></code> to PartType0 in the snapshots
+indicating if a gas cell is allowed to be refined and if it is, how
+often this cell has already been split: if 0, no splitting allowed. If
+odd (starting at 1), the cell was already present in the ICs. If even
+(starting at 2), the cell was generated from a type 1 particle.  For
+values of 3 or more, <code class="docutils literal notranslate"><span class="pre">floor((AllowRefinement-1)/2.0)</span></code> gives the
+number of times the cell was split.</p>
+<hr class="docutils" />
+<p><strong>NODEREFINE_BACKGROUND_GRID</strong></p>
+<p>The background grid will be prevented from derefining, when refinement
+is used. In practice, enabling this option requires an input parameter
+<code class="docutils literal notranslate"><span class="pre">MeanVolume</span></code>. Derefinement is then disallowed during the run for all
+cells with <code class="docutils literal notranslate"><span class="pre">Volume</span> <span class="pre">&gt;</span> <span class="pre">0.1</span> <span class="pre">*</span> <span class="pre">MeanVolume</span></code>.</p>
+<hr class="docutils" />
+<p><strong>OPTIMIZE_MESH_MEMORY_FOR_REFINEMENT</strong></p>
+<p>If activated some grid structures not needed for mesh refinement or
+derefinement are freed before the function for refinement and
+derefinement is called. The remaining mesh structures are freed after
+this step as usual.</p>
+</section>
+<hr class="docutils" />
+<section id="non-standard-physics">
+<h2>Non-standard physics<a class="headerlink" href="#non-standard-physics" title="Permalink to this headline">¶</a></h2>
+<p><strong>COOLING</strong></p>
+<p>Simple primordial cooling routine.</p>
+<hr class="docutils" />
+<p><strong>ENFORCE_JEANS_STABILITY_OF_CELLS</strong></p>
+<p>This imposes an adaptive floor for the temperature.</p>
+<hr class="docutils" />
+<p><strong>USE_SFR</strong></p>
+<p>Star formation model, turning dense gas into collisionless
+particles. See Springel &amp; Hernquist, (2003, MNRAS, 339, 289)</p>
+<hr class="docutils" />
+<p><strong>SFR_KEEP_CELLS</strong></p>
+<p>Do not destroy cell out of which a star has formed.</p>
+</section>
+<hr class="docutils" />
+<section id="gravity">
+<h2>Gravity<a class="headerlink" href="#gravity" title="Permalink to this headline">¶</a></h2>
+<p>If nothing is actived in this section, gravity is not included.</p>
+<p><strong>SELFGRAVITY</strong></p>
+<p>Computes gravitational interactions between simulation particles and
+cells.</p>
+<hr class="docutils" />
+<p><strong>HIERARCHICAL_GRAVITY</strong></p>
+<p>Uses hierarchical splitting of the time integration of the gravity.</p>
+<hr class="docutils" />
+<p><strong>CELL_CENTER_GRAVITY</strong></p>
+<p>Uses geometric centers (instead of mesh-generating points) to
+calculate gravity of cells, only possible with
+<code class="docutils literal notranslate"><span class="pre">HIERARCHICAL_GRAVITY</span></code>.</p>
+<hr class="docutils" />
+<p><strong>NO_GAS_SELFGRAVITY</strong></p>
+<p>Switches off gas self-gravity in tree.</p>
+<hr class="docutils" />
+<p><strong>GRAVITY_NOT_PERIODIC</strong></p>
+<p>Gravity is not treated periodically.</p>
+<hr class="docutils" />
+<p><strong>ALLOW_DIRECT_SUMMATION</strong></p>
+<p>Performs direct summation instead of tree-based gravity if number of
+active particles &lt; <code class="docutils literal notranslate"><span class="pre">DIRECT_SUMMATION_THRESHOLD</span></code> (= 3000 unless
+specified differently)</p>
+<hr class="docutils" />
+<p><strong>DIRECT_SUMMATION_THRESHOLD=1000</strong></p>
+<p>Overrides maximum number of active particles for which direct
+summation is performed instead of a tree based calculation.</p>
+<hr class="docutils" />
+<p><strong>EXACT_GRAVITY_FOR_PARTICLE_TYPE=4</strong></p>
+<p>Enables direct summation gravity calculation for the given particle
+type.</p>
+<hr class="docutils" />
+<p><strong>EVALPOTENTIAL</strong></p>
+<p>When this option is set, the code will compute the gravitational
+potential energy each time a global statistics is computed. This can
+be useful for testing global energy conservation.</p>
+</section>
+<hr class="docutils" />
+<section id="treepm">
+<h2>TreePM<a class="headerlink" href="#treepm" title="Permalink to this headline">¶</a></h2>
+<p>If no option is actived here: no Particle-Mesh calculation is done.</p>
+<p><strong>PMGRID=512</strong></p>
+<p>Dimension of particle-mesh grid covering the domain.  This enables the
+TreePM method, i.e. the long-range force is computed with a
+PM-algorithm, and the short range force with the tree.  The parameter
+has to be set to the size of the mesh that should be used, e.g. 256,
+512, 1024 etc. The mesh dimensions need not necessarily be a power of
+two, but the FFT is fastest for such a choice.  Note: If the
+simulation is not in a periodic box, then a FFT method for vacuum
+boundaries is employed, using a mesh with dimension twice that
+specified by <code class="docutils literal notranslate"><span class="pre">PMGRID</span></code>. Should not be used with a mesh much smaller
+than 256, because the TreePM approximation is only valid if the range
+of the tree calculation is small compared to the box size.</p>
+<hr class="docutils" />
+<p><strong>ASMTH=1.25</strong></p>
+<p>This factor expressed the adopted force split scale in the TreePM
+approach in units of the grid cell size. Setting this value overrides
+the default value of 1.25, in mesh-cells, which defines the
+long-range/short-range force split.</p>
+<hr class="docutils" />
+<p><strong>RCUT=6.0</strong></p>
+<p>This determines the maximum radius, in units of the force split scale,
+out to which the tree calculation in TreePM mode considers tree
+nodes. If a tree node is more distant, the corresponding branch is
+discarded. The default value is
+4.5, given in mesh-cells.</p>
+<hr class="docutils" />
+<p><strong>PM_ZOOM_OPTIMIZED</strong></p>
+<p>This option enables a different communication algorithm in the PM
+calculations which works well independent of the data layout, in
+particular it can cope well with highly clustered particle
+distributions that occupy only a small subset of the total simulated
+volume. However, this method is a bit slower than the default approach
+(used when the option is disabled), which is best matched for
+homogeneously sampled periodic boxes.</p>
+<hr class="docutils" />
+<p><strong>PLACEHIGHRESREGION=2</strong></p>
+<p>If this option is set (will only work together with <code class="docutils literal notranslate"><span class="pre">PMGRID</span></code>), then
+the long range force is computed in two stages: One Fourier-grid is
+used to cover the whole simulation volume, allowing the computation of
+the large-scale force.  A second Fourier mesh is placed on the region
+occupied by “high-resolution” particles, allowing the computation of
+an intermediate-scale force. Finally, the force on very small scales
+is computed by the tree. This procedure can be useful for
+“zoom-simulations”, where the majority of particles (the high-res
+particles) are occupying only a small fraction of the volume. To
+activate this option, the parameter needs to be set to an integer that
+encodes the particle type(s) that make up the high-res particles in
+the form of a bit mask. For example, if types 0, 1, and 4 are the
+high-res particles, then the parameter should be set to
+<code class="docutils literal notranslate"><span class="pre">PLACEHIGHRESREGION=1+2+16</span></code>, i.e. to the sum 2^0 + 2^1 + 2^4. The
+spatial region covered by the high-res grid is determined
+automatically from the initial conditions. The region is recalculated
+if one of the selected particles is falling outside of the
+high-resolution region. Note: If a periodic box is used, the high-res
+zone is not allowed to intersect the box boundaries.</p>
+<hr class="docutils" />
+<p><strong>ENLARGEREGION=1.1</strong></p>
+<p>This is only relevant when <code class="docutils literal notranslate"><span class="pre">PLACEHIGHRESREGION</span></code> is activated. The
+size of the high resolution box will be automatically determined as
+the minimum size required to contain the selected particle type(s), in
+a “shrink-wrap” fashion.  This region is expanded on the fly, if
+needed (see above). However, in order to prevent a situation where
+this size needs to be enlarged frequently, such as when the particle
+set is (slowly) expanding, the minimum size is multiplied by the
+factor <code class="docutils literal notranslate"><span class="pre">ENLARGEREGION</span></code> (if defined). Then even if the set is
+expanding, this will only rarely trigger a recalculation of the high
+resolution mesh geometry, which is in general also associated with a
+change of the force split scale.</p>
+<hr class="docutils" />
+<p><strong>GRIDBOOST=2</strong></p>
+<p>Normally, if <code class="docutils literal notranslate"><span class="pre">PLACEHIGHRESREGION</span></code> is enabled, the code will try to
+employ an effective grid size for the high-resolution patch that is
+equivalent to <code class="docutils literal notranslate"><span class="pre">PMGRID</span></code>. Because zero-padding has to be used for the
+high-res inset, this gives a total mesh twice as large, which
+corresponds to <code class="docutils literal notranslate"><span class="pre">GRIDBOOST=2</span></code>. This value can here be modified by
+hand, to e.g. 1, 3, 4, etc., to decrease or increase the size of
+the high-res PM grid relative to that covering the full box. The total
+mesh size used for the high-resolution FFTs is given by
+<code class="docutils literal notranslate"><span class="pre">GRIDBOOST*PMGRID</span></code>.</p>
+<hr class="docutils" />
+<p><strong>FFT_COLUMN_BASED</strong></p>
+<p>When this is enabled, the FFT calculations are not parallelized in
+terms of a slab-decomposition but rather through a column based
+approach. This scales to larger number of MPI ranks but is slower in
+absolute terms as twice as many transpose operations need to be
+performed. It is hence only worthwhile to use this option for a very
+large number of MPI ranks that exceeds the 1D mesh dimension.</p>
+</section>
+<hr class="docutils" />
+<section id="gravity-softening">
+<h2>Gravity softening<a class="headerlink" href="#gravity-softening" title="Permalink to this headline">¶</a></h2>
+<p>In the default configuration, the code uses a small table of possible
+gravitational softening lengths, which are specified in the parameter
+file through the <code class="docutils literal notranslate"><span class="pre">SofteningComovingTypeX</span></code> and
+<code class="docutils literal notranslate"><span class="pre">SofteningMaxPhysTypeX</span></code> options, where X is an integer that gives
+the “softening type”. Each particle type is mapped to one of these
+softening types through the <code class="docutils literal notranslate"><span class="pre">SofteningTypeOfPartTypeY</span></code> parameters,
+where <code class="docutils literal notranslate"><span class="pre">Y</span></code> gives the particle type.  The number of particle types and
+the number of softening types do not necessarily have to be
+equal. Several particle types can be mapped to the same softening if
+desired.</p>
+<p><strong>NSOFTTYPES=4</strong></p>
+<p>This can be changed to modify the number of available softening
+types. These must be explicitly input as SofteningComovingTypeX
+parameters, and so the value of <code class="docutils literal notranslate"><span class="pre">NSOFTTYPES</span></code> must match the number
+of these entries in the parameter file.</p>
+<hr class="docutils" />
+<p><strong>MULTIPLE_NODE_SOFTENING</strong></p>
+<p>If the tree walk wants to use a ‘softened node’ (i.e. where the
+maximum gravitational softening of some particles in the node is
+larger than the node distance and larger than the target particle’s
+softening), the node is opened by default (because there could be mass
+components with a still smaller softening hidden in the node). This
+can cause a substantial performance penalty in some cases. By setting
+this option, this can be avoided. The code will then be allowed to use
+softened nodes, but it does that by evaluating the node-particle
+interaction for each mass component with different softening type
+separately (but by neglecting possible shifts in their centers of
+masses).  This also requires that each tree node computes and stores a
+vector with these different masses. It is therefore desirable to not
+make the table of softening types excessively large. This option can
+be combined with adaptive hydro softening. In this case, particle type
+0 needs to be mapped to softening type 0 in the parameter file, and no
+other particle type may be mapped to softening type 0 (the code will
+issue an error message if one doesn’t obey to this).</p>
+<hr class="docutils" />
+<p><strong>INDIVIDUAL_GRAVITY_SOFTENING=2+4</strong></p>
+<p>The code can also be asked to set the softening types of some of the
+particle types automatically based on particle mass. The particle
+types to which this is applied are set by this compile time option
+through a bitmask encoding the types. The code by default assumes that
+the softening of particle type 1 should be the reference. To this end,
+the code determines the average mass of type 1 particles, and the
+types selected through this option then compute a desired softening
+length by scaling the type-1 softening with the cube root of the mass
+ratio. Then, the softening type that is closest to this desired
+softening is assigned to the particle (<em>choosing only from those
+softening values explicitly input as a SofteningComovingTypeX
+parameter</em>). This option is primarily useful for zoom simulations,
+where one may for example lump all boundary dark matter particles
+together into type 2 or 3, but yet provide a set of softening types
+over which they are automatically distributed according to their
+mass. If both <code class="docutils literal notranslate"><span class="pre">ADAPTIVE_HYDRO_SOFTENING</span></code> and
+<code class="docutils literal notranslate"><span class="pre">MULTIPLE_NODE_SOFTENING</span></code> are set, the softening types considered
+for assignment exclude softening type 0. Note: particles that accrete
+matter (black holes or sinks) get their softening updated if needed.</p>
+<hr class="docutils" />
+<p><strong>ADAPTIVE_HYDRO_SOFTENING</strong></p>
+<p>When this is enabled, the gravitational softening lengths of hydro
+cells are varied along with their radius. To this end, the radius of a
+cell is multiplied by the parameter <code class="docutils literal notranslate"><span class="pre">GasSoftFactor</span></code>. Then, the
+closest softening from a logarithmically spaced table of possible
+softenings is adopted for the cell. The minimum softening in the table
+is specified by the parameter <code class="docutils literal notranslate"><span class="pre">MinimumComovingHydroSoftening</span></code>, and
+the larger ones are spaced a factor <code class="docutils literal notranslate"><span class="pre">AdaptiveHydroSofteningSpacing</span></code>
+apart. The resulting minimum and maximum softening values are reported
+in the stdout log file.</p>
+<hr class="docutils" />
+<p><strong>NSOFTTYPES_HYDRO=64</strong></p>
+<p>This is only relevant if <code class="docutils literal notranslate"><span class="pre">ADAPTIVE_HYDRO_SOFTENING</span></code> is enabled and
+can be set to override the default value of 64 for the length of the
+logarithmically spaced softening table. The sum of <code class="docutils literal notranslate"><span class="pre">NSOFTTYPES</span></code> and
+<code class="docutils literal notranslate"><span class="pre">NSOFTTYPES_HYDRO</span></code> may not exceed 254 (this is checked).</p>
+</section>
+<hr class="docutils" />
+<section id="external-gravity">
+<h2>External gravity<a class="headerlink" href="#external-gravity" title="Permalink to this headline">¶</a></h2>
+<p>By default, there is no external gravitational potential.</p>
+<p><strong>EXTERNALGRAVITY</strong></p>
+<p>Master switch for external potential.</p>
+<hr class="docutils" />
+<p><strong>EXTERNALGY=0.0</strong></p>
+<p>Constant external gravity in the y-direction</p>
+<hr class="docutils" />
+<section id="nfw-potential">
+<h3>NFW Potential<a class="headerlink" href="#nfw-potential" title="Permalink to this headline">¶</a></h3>
+<p><strong>STATICNFW</strong></p>
+<p>Static gravitational Navarro-Frenk-White (NFW) potential.</p>
+<hr class="docutils" />
+<p><strong>NFW_C=12</strong></p>
+<p>Concentration parameter of NFW potential.</p>
+<hr class="docutils" />
+<p><strong>NFW_M200=100.0</strong></p>
+<p>Mass causing the NFW potential.</p>
+<hr class="docutils" />
+<p><strong>NFW_Eps=0.01</strong></p>
+<p>Softening of NFW potential.</p>
+<hr class="docutils" />
+<p><strong>NFW_DARKFRACTION=0.87</strong></p>
+<p>Fraction of dark matter in NFW potential. The potential will be
+reduced by this factor (with the idea being that the complement is
+respresented by gas mass included explicitly in the simulation).</p>
+</section>
+<hr class="docutils" />
+<section id="isothermal-sphere">
+<h3>Isothermal Sphere<a class="headerlink" href="#isothermal-sphere" title="Permalink to this headline">¶</a></h3>
+<p><strong>STATICISO</strong></p>
+<p>Static gravitational isothermal sphere potential.</p>
+<hr class="docutils" />
+<p><strong>ISO_M200=100.0</strong></p>
+<p>Mass causing the isothermal sphere potential.</p>
+<hr class="docutils" />
+<p><strong>ISO_R200=160.0</strong></p>
+<p>Radius of the isothermal sphere potential.</p>
+<hr class="docutils" />
+<p><strong>ISO_Eps=0.1</strong></p>
+<p>Softening of isothermal sphere potential.</p>
+<hr class="docutils" />
+<p><strong>ISO_FRACTION=0.9</strong></p>
+<p>Fraction in dark matter in isothermal sphere potential. Potential will
+be reduced by this factor.</p>
+</section>
+<hr class="docutils" />
+<section id="hernquist-potential">
+<h3>Hernquist Potential<a class="headerlink" href="#hernquist-potential" title="Permalink to this headline">¶</a></h3>
+<p><strong>STATICHQ</strong></p>
+<p>Static gravitational Hernquist potential.</p>
+<hr class="docutils" />
+<p><strong>HQ_M200=186.015773</strong></p>
+<p>Mass causing the Hernquist potential.</p>
+<hr class="docutils" />
+<p><strong>HQ_C=10.0</strong></p>
+<p>Concentration parameter of Hernquist potential.</p>
+<hr class="docutils" />
+<p><strong>HQ_DARKFRACTION=0.9</strong></p>
+<p>Fraction in dark matter in Hernquist potential. Potential will be
+reduced by this factor.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="time-integration">
+<h2>Time integration<a class="headerlink" href="#time-integration" title="Permalink to this headline">¶</a></h2>
+<p><strong>FORCE_EQUAL_TIMESTEPS</strong></p>
+<p>Variable but global timestep. Here the tightest timestep criterion
+evaluated for any of the particles determines the timestep of all
+particles.</p>
+<hr class="docutils" />
+<p><strong>TREE_BASED_TIMESTEPS</strong></p>
+<p>Non-local timestep criterion (which takes the ‘signal speed’ of
+hydrodynamical waves arriving from any point into account).</p>
+<hr class="docutils" />
+<p><strong>PM_TIMESTEP_BASED_ON_TYPES=2+4</strong></p>
+<p>Particle types that should be considered in setting the PM timestep.</p>
+<hr class="docutils" />
+<p><strong>NO_PMFORCE_IN_SHORT_RANGE_TIMESTEP</strong></p>
+<p>PM force is not included in short-range timestep criterion.</p>
+<hr class="docutils" />
+<p><strong>ENLARGE_DYNAMIC_RANGE_IN_TIME</strong></p>
+<p>This extends the dynamic range of the integer timeline from 32 to 64
+bits.</p>
+</section>
+<hr class="docutils" />
+<section id="message-passing-interface">
+<h2>Message Passing Interface<a class="headerlink" href="#message-passing-interface" title="Permalink to this headline">¶</a></h2>
+<p><strong>IMPOSE_PINNING</strong></p>
+<p>Enforce pinning of MPI tasks to cores if MPI does not do it.</p>
+<hr class="docutils" />
+<p><strong>IMPOSE_PINNING_OVERRIDE_MODE</strong></p>
+<p>Override MPI pinning, if present.</p>
+</section>
+<hr class="docutils" />
+<section id="single-double-precision">
+<h2>Single/Double Precision<a class="headerlink" href="#single-double-precision" title="Permalink to this headline">¶</a></h2>
+<p><strong>DOUBLEPRECISION=1</strong></p>
+<p>Mode of numerical precision: not set: single; 1: full double precision
+2: mixed, 3: mixed, fewer single precisions; unless extremely short of
+memory, we recommend to always use 1.</p>
+<hr class="docutils" />
+<p><strong>DOUBLEPRECISION_FFTW</strong></p>
+<p>FFTW calculation in double precision.</p>
+<hr class="docutils" />
+<p><strong>OUTPUT_IN_DOUBLEPRECISION</strong></p>
+<p>Snapshot files will be written in double precision.</p>
+<hr class="docutils" />
+<p><strong>INPUT_IN_DOUBLEPRECISION</strong></p>
+<p>Initial conditions are in double precision.</p>
+<hr class="docutils" />
+<p><strong>OUTPUT_COORDINATES_IN_DOUBLEPRECISION</strong></p>
+<p>Will always output coordinates in double precision.</p>
+<hr class="docutils" />
+<p><strong>NGB_TREE_DOUBLEPRECISION</strong></p>
+<p>If this is enabled, double precision is aslo used for storing the
+spatial neighbor node extension (the precision requirements for this
+are less demanding than for other quantities).</p>
+</section>
+<hr class="docutils" />
+<section id="groupfinder">
+<h2>Groupfinder<a class="headerlink" href="#groupfinder" title="Permalink to this headline">¶</a></h2>
+<p><strong>FOF</strong></p>
+<p>Master switch to enable the friends-of-friends group finder in the
+code. This will then usually be applied automatically before snapshot
+files are written (unless disabled selectively for certain output
+dumps).</p>
+<hr class="docutils" />
+<p><strong>FOF_PRIMARY_LINK_TYPES=2</strong></p>
+<p>This option selects the particle types that are processed by the
+friends-of-friends linking algorithm. A default linking length of 0.2
+is assumed for this particle type unless specified otherwise.  The
+specified value corresponds to Sum(2^type) for the primary dark matter
+type(s).</p>
+<hr class="docutils" />
+<p><strong>FOF_SECONDARY_LINK_TYPES=1+16+32</strong></p>
+<p>With this option, FOF groups can be augmented by particles/cells of
+other particle types that they “enclose”. To this end, for each
+particle among the types selected by the bit mask specified with
+<code class="docutils literal notranslate"><span class="pre">FOF_SECONDARY_LINK_TYPES</span></code>, the nearest among
+<code class="docutils literal notranslate"><span class="pre">FOF_PRIMARY_LINK_TYPES</span></code> is found and then the particle is attached
+to whatever group this particle is in. The specified values
+corresponds to sum(2^type) for the types linked to nearest primaries.</p>
+<hr class="docutils" />
+<p><strong>FOF_SECONDARY_LINK_TARGET_TYPES= 2</strong></p>
+<p>An option to make the secondary linking work better in zoom runs
+(after the FOF groups have been found, the tree is newly constructed
+for all the secondary link targets). This should normally be set to
+all dark matter particle types. If not set, it defaults to
+<code class="docutils literal notranslate"><span class="pre">FOF_PRIMARY_LINK_TYPES</span></code>, which reproduces the old behavior.</p>
+<hr class="docutils" />
+<p><strong>FOF_GROUP_MIN_LEN=32</strong></p>
+<p>Minimum number of particles (primary+secondary) in one group (default
+is 32).</p>
+<hr class="docutils" />
+<p><strong>FOF_LINKLENGTH=0.16</strong></p>
+<p>Linking length for FoF in units of the mean inter-particle separation
+(default=0.2).</p>
+<hr class="docutils" />
+<p><strong>FOF_STOREIDS</strong></p>
+<p>Normally, the snapshots produced with a FOF group catalogue are stored
+in group order, such that the particle set making up a group can be
+inferred as a contiguous block of particles in the snapshot file,
+making it redundant to separately store the IDs of the particles
+forming a group in the group catalogue. By activating this option, one
+can nevertheless enforce the creation of the corresponding lists of
+IDs as part of the group catalogue output.</p>
+</section>
+<hr class="docutils" />
+<section id="subfind">
+<h2>Subfind<a class="headerlink" href="#subfind" title="Permalink to this headline">¶</a></h2>
+<p><strong>SUBFIND</strong></p>
+<p>When enabled, this automatically applies the Subfind subtructure
+finder to all FOF groups after they have been found. Also, the
+snapshot files are brought into subhalo order within each group.</p>
+<hr class="docutils" />
+<p><strong>SAVE_HSML_IN_SNAPSHOT</strong></p>
+<p>When activated, this will store the smoothing kernel lengths used for
+estimating the total matter density around every point, and the
+corresponding densities, in the snapshot files associated with a run
+of Subfind.</p>
+<hr class="docutils" />
+<p><strong>SUBFIND_CALC_MORE</strong></p>
+<p>Additional calculations are carried out in the Subfind algorithm,
+which are not always needed.
+(i) The velocity dispersion in the kernel volume used for estimating
+the local density.
+(ii) The DM density around every particle is stored in the snapshot if
+this is set together with <code class="docutils literal notranslate"><span class="pre">SAVE_HSML_IN_SNAPSHOT</span></code>.</p>
+<hr class="docutils" />
+<p><strong>SUBFIND_EXTENDED_PROPERTIES</strong></p>
+<p>Additional calculations are carried out in the Subfind algorithm,
+which are not always needed and may be expensive.
+(i) Further quantities related to the angular momentum in different
+components.
+(ii) The kinetic, thermal and potential binding energies for spherical
+overdensity halos.</p>
+</section>
+<hr class="docutils" />
+<section id="special-behavior">
+<h2>Special behavior<a class="headerlink" href="#special-behavior" title="Permalink to this headline">¶</a></h2>
+<p><strong>RUNNING_SAFETY_FILE</strong></p>
+<p>If file ‘./running’ exists, do not start the run. Can be used to
+prevent that a simulation is executed twice at the same time.</p>
+<hr class="docutils" />
+<p><strong>MULTIPLE_RESTARTS</strong></p>
+<p>Keep several restart files instead of just last two copies.</p>
+<hr class="docutils" />
+<p><strong>EXTENDED_GHOST_SEARCH</strong></p>
+<p>This extends the ghost search to the full 3x3 domain instead of the
+principal domain. This can be needed for a successful mesh
+construction if the box is sampled only with a couple of cells per
+dimension.</p>
+<hr class="docutils" />
+<p><strong>DOUBLE_STENCIL</strong></p>
+<p>This will ensure that the boundary region of the local mesh is deep
+enough to have a valid double stencil for all local cells. This is not
+needed for the default algorithms but can be useful for code
+extensions.</p>
+<hr class="docutils" />
+<p><strong>TETRA_INDEX_IN_FACE</strong></p>
+<p>Adds an extra index to each entry of VF[] and DC[] to one of the
+tetrahedra that share this edge. This may be useful for code
+extensions.</p>
+<hr class="docutils" />
+<p><strong>NOSTOP_WHEN_BELOW_MINTIMESTEP</strong></p>
+<p>Simulation does not terminate when timestep drops below the specified
+minimum timestep size, instead it continues with this timestep
+floor.</p>
+<hr class="docutils" />
+<p><strong>TIMESTEP_OUTPUT_LIMIT</strong></p>
+<p>Limits timesteps such that the requested output times are honored even
+if their spacing is finer than the smallest timestep the code makes,
+i.e. the code uses the output spacing as an additional timestep
+criterion.</p>
+<hr class="docutils" />
+<p><strong>ALLOWEXTRAPARAMS</strong></p>
+<p>Tolerate extra parameters in the parameter file that are not
+used. Normally, the code aborts with a complaint if such parameters
+are encountered.</p>
+<hr class="docutils" />
+<p><strong>FIX_SPH_PARTICLES_AT_IDENTICAL_COORDINATES</strong></p>
+<p>This can be used to load SPH ICs that contain particles at identical
+coordinates.</p>
+<hr class="docutils" />
+<p><strong>RECOMPUTE_POTENTIAL_IN_SNAPSHOT</strong></p>
+<p>Needed for post-processing option 18 that can be used to calculate potential
+values for a snapshot.</p>
+<hr class="docutils" />
+<p><strong>ACTIVATE_MINIMUM_OPENING_ANGLE</strong></p>
+<p>This does not open tree nodes under the relative opening criterion any
+more if their opening angle has dropped below a minimum angle.</p>
+<hr class="docutils" />
+<p><strong>USE_DIRECT_IO_FOR_RESTARTS</strong></p>
+<p>Try to use O_DIRECT for low-level read/write operations of restart
+files to circumvent linux kernel page caching.</p>
+<hr class="docutils" />
+<p><strong>HUGEPAGES</strong></p>
+<p>Use huge pages for memory allocation, through hugetlbfs library. Only
+possible if the machine supports this.</p>
+<hr class="docutils" />
+<p><strong>DETAILEDTIMINGS</strong></p>
+<p>Creates individual timing entries for primary/secondary kernels to
+help in diagnosing work-load balancing.</p>
+<hr class="docutils" />
+<p><strong>BITS_PER_DIMENSION=42</strong></p>
+<p>Bits per dimension used for computing Peano-Hilbert keys. (default: 42)</p>
+</section>
+<hr class="docutils" />
+<section id="input-options">
+<h2>Input options<a class="headerlink" href="#input-options" title="Permalink to this headline">¶</a></h2>
+<p><strong>COMBINETYPES</strong></p>
+<p>Reads in the IC file types 4+5 as type 3.</p>
+<hr class="docutils" />
+<p><strong>LOAD_TYPES=1+2+4+16+32</strong></p>
+<p>Load only specific types sum(2^type).</p>
+<hr class="docutils" />
+<p><strong>READ_COORDINATES_IN_DOUBLE</strong></p>
+<p>Read coordinates in double precision.</p>
+<hr class="docutils" />
+<p><strong>LONGIDS</strong></p>
+<p>If this is set, the code stores particle-IDs as 64-bit long
+integers. This is only really needed if you want to go beyond ~2
+billion particles.</p>
+<hr class="docutils" />
+<p><strong>OFFSET_FOR_NON_CONTIGUOUS_IDS</strong></p>
+<p>Determines offset of IDs on startup instead of using fixed offset.</p>
+<hr class="docutils" />
+<p><strong>GENERATE_GAS_IN_ICS</strong></p>
+<p>Generates gas from dark matter only ICs (using particle type 1 by default).</p>
+<hr class="docutils" />
+<p><strong>SPLIT_PARTICLE_TYPE=4+8</strong></p>
+<p>Overrides splitting particle type 1 in <code class="docutils literal notranslate"><span class="pre">GENERATE_GAS_IN_ICS</span></code> use sum(2^type).</p>
+<hr class="docutils" />
+<p><strong>SHIFT_BY_HALF_BOX</strong></p>
+<p>Shift all positions by half a box size after reading in.</p>
+<hr class="docutils" />
+<p><strong>NTYPES_ICS=6</strong></p>
+<p>Number of particle types in ICs, if not <code class="docutils literal notranslate"><span class="pre">NTYPES</span></code>.</p>
+<hr class="docutils" />
+<p><strong>READ_MASS_AS_DENSITY_IN_INPUT</strong></p>
+<p>Reads the mass field in the IC as density.</p>
+</section>
+<hr class="docutils" />
+<section id="special-input-options">
+<h2>Special input options<a class="headerlink" href="#special-input-options" title="Permalink to this headline">¶</a></h2>
+<p><strong>IDS_OFFSET=1</strong></p>
+<p>Override offset for gas cell IDs if created from dark matter
+particles.</p>
+<hr class="docutils" />
+<p><strong>READ_DM_AS_GAS</strong></p>
+<p>Reads in dark matter particles as gas cells.</p>
+<hr class="docutils" />
+<p><strong>TILE_ICS</strong></p>
+<p>Tile ICs by TileICsFactor (specified as parameter) in each dimension.</p>
+</section>
+<hr class="docutils" />
+<section id="output-fields">
+<h2>Output fields<a class="headerlink" href="#output-fields" title="Permalink to this headline">¶</a></h2>
+<p>Default output fields are: <code class="docutils literal notranslate"><span class="pre">position</span></code>, <code class="docutils literal notranslate"><span class="pre">velocity</span></code>, <code class="docutils literal notranslate"><span class="pre">ID</span></code>, <code class="docutils literal notranslate"><span class="pre">mass</span></code>,
+<code class="docutils literal notranslate"><span class="pre">specific</span> <span class="pre">internal</span> <span class="pre">energy</span></code> (gas only), <code class="docutils literal notranslate"><span class="pre">density</span></code> (gas only)</p>
+<p><strong>OUTPUT_TASK</strong></p>
+<p>Output of MPI rank on which a certainl cell or particle resides.</p>
+<hr class="docutils" />
+<p><strong>OUTPUT_TIMEBIN_HYDRO</strong></p>
+<p>Output of hydrodynamical time-bin.</p>
+<hr class="docutils" />
+<p><strong>OUTPUT_PRESSURE_GRADIENT</strong></p>
+<p>Output of pressure gradient.</p>
+<hr class="docutils" />
+<p><strong>OUTPUT_DENSITY_GRADIENT</strong></p>
+<p>Output of density gradient.</p>
+<hr class="docutils" />
+<p><strong>OUTPUT_VELOCITY_GRADIENT</strong></p>
+<p>Output of velocity gradient.</p>
+<hr class="docutils" />
+<p><strong>OUTPUT_BFIELD_GRADIENT</strong></p>
+<p>Output of magnetic field gradient.</p>
+<hr class="docutils" />
+<p><strong>OUTPUT_MESH_FACE_ANGLE</strong></p>
+<p>Output of maximum face angle of cells.</p>
+<hr class="docutils" />
+<p><strong>OUTPUT_VERTEX_VELOCITY</strong></p>
+<p>Output of velocity of mesh-generating points.</p>
+<hr class="docutils" />
+<p><strong>OUTPUT_VOLUME</strong></p>
+<p>Output of volume of cells; note that this can always be computed from density
+and mass of cells, which are included by default in the output.</p>
+<hr class="docutils" />
+<p><strong>OUTPUT_CENTER_OF_MASS</strong></p>
+<p>Output of center of mass of cells (<code class="docutils literal notranslate"><span class="pre">Pos</span></code> is the position of the
+mesh-generating point).</p>
+<hr class="docutils" />
+<p><strong>OUTPUT_SURFACE_AREA</strong></p>
+<p>Output of surface area of cells as well as the number of faces.</p>
+<hr class="docutils" />
+<p><strong>OUTPUT_PRESSURE</strong></p>
+<p>Output of pressure of gas.</p>
+<hr class="docutils" />
+<p><strong>OUTPUTPOTENTIAL</strong></p>
+<p>This will force the code to compute gravitational potential values for
+all particles and cells each time a snapshot file is generated. These
+values are then included in the snapshot files. Note that the
+computation of the values of the potential costs additional time.</p>
+<hr class="docutils" />
+<p><strong>OUTPUTACCELERATION</strong></p>
+<p>Output of gravitational acceleration.</p>
+<hr class="docutils" />
+<p><strong>OUTPUTTIMESTEP</strong></p>
+<p>Output of timestep of particle.</p>
+<hr class="docutils" />
+<p><strong>OUTPUT_SOFTENINGS</strong></p>
+<p>Output of particle softenings.</p>
+<hr class="docutils" />
+<p><strong>OUTPUTGRAVINTERACTIONS</strong></p>
+<p>Output of gravitational interaction count (from the gravitational
+tree) of particles, which is used in the work-load balancing
+algorithm.</p>
+<hr class="docutils" />
+<p><strong>OUTPUTCOOLRATE</strong></p>
+<p>Output of cooling rate.</p>
+<hr class="docutils" />
+<p><strong>OUTPUT_DIVVEL</strong></p>
+<p>Output of velocity divergence.</p>
+<hr class="docutils" />
+<p><strong>OUTPUT_CURLVEL</strong></p>
+<p>Output of velocity curl.</p>
+<hr class="docutils" />
+<p><strong>OUTPUT_COOLHEAT</strong></p>
+<p>Output of actual energy loss/gain in cooling/heating routine.</p>
+<hr class="docutils" />
+<p><strong>OUTPUT_VORTICITY</strong></p>
+<p>Output of vorticity of gas.</p>
+<hr class="docutils" />
+<p><strong>OUTPUT_CSND</strong></p>
+<p>Output of sound speed. This field is only used for tree-based timesteps.
+Calculate from hydro quantities in post-processing if required for science
+applications.</p>
+</section>
+<hr class="docutils" />
+<section id="output-options">
+<h2>Output options<a class="headerlink" href="#output-options" title="Permalink to this headline">¶</a></h2>
+<p><strong>PROCESS_TIMES_OF_OUTPUTLIST</strong></p>
+<p>Goes through times of output list prior to starting the simulation to
+ensure that outputs are written as close to the desired time as
+possible (i.e. also up to half a timestep size before it, as opposed
+to always after at the next possible time if this flag is not active).</p>
+<hr class="docutils" />
+<p><strong>REDUCE_FLUSH</strong></p>
+<p>If enabled, files and stdout are only flushed after a certain time
+defined in the parameter file (standard behavior: everything is
+flushed whenever something is written to it).</p>
+<hr class="docutils" />
+<p><strong>OUTPUT_EVERY_STEP</strong></p>
+<p>Create snapshot on every (global) synchronization point, independent of
+parameters chosen or output list.</p>
+<hr class="docutils" />
+<p><strong>OUTPUT_CPU_CSV</strong></p>
+<p>Output of a cpu.csv file on top of cpu.txt.</p>
+<hr class="docutils" />
+<p><strong>HAVE_HDF5</strong></p>
+<p>If this is set, the code will be compiled with support for input and
+output in the HDF5 format. You need to have the HDF5 libraries and
+headers installed on your computer for this option to work. The HDF5
+format can then be selected as format “3” in Arepo’s parameterfile.</p>
+<hr class="docutils" />
+<p><strong>HDF5_FILTERS</strong></p>
+<p>Activate snapshot compression and checksum for HDF5 output.</p>
+<hr class="docutils" />
+<p><strong>OUTPUT_XDMF</strong></p>
+<p>Writes an <code class="docutils literal notranslate"><span class="pre">.xmf</span></code> file for each snapshot, which can be read by the
+visualization toolkit Visit (with the hdf5 snapshot). Note: so far
+only working if the snapshot is stored in one file.</p>
+</section>
+<hr class="docutils" />
+<section id="testing-and-debugging">
+<h2>Testing and Debugging<a class="headerlink" href="#testing-and-debugging" title="Permalink to this headline">¶</a></h2>
+<p><strong>DEBUG</strong></p>
+<p>Enables core-dumps.</p>
+<hr class="docutils" />
+<p><strong>VERBOSE</strong></p>
+<p>Reports readjustments of buffer sizes.</p>
+</section>
+<hr class="docutils" />
+<section id="re-gridding">
+<h2>Re-gridding<a class="headerlink" href="#re-gridding" title="Permalink to this headline">¶</a></h2>
+<p>These options are auxiliary modes to prepare/convert/relax initial
+conditions and will not carry out a simulation.</p>
+<p><strong>MESHRELAX</strong></p>
+<p>This keeps the mass constant and only regularizes the mesh.</p>
+<hr class="docutils" />
+<p><strong>ADDBACKGROUNDGRID=16</strong></p>
+<p>Re-grid hydrodynamical quantities on an oct-tree AMR grid. This does
+not perform a simulation. This “converts” an SPH initial condition
+into a (moving) mesh initial condition.</p>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Arepo</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="running.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simtypes.html">Simulation examples</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Code Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#basic-operation-mode">Basic operation mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#computational-box">Computational box</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hydrodynamics">Hydrodynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#magnetohydrodynamics">Magnetohydrodynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#riemann-solver">Riemann solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mesh-motion">Mesh motion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#refinement">Refinement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#non-standard-physics">Non-standard physics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#gravity">Gravity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#treepm">TreePM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#gravity-softening">Gravity softening</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#external-gravity">External gravity</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#nfw-potential">NFW Potential</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#isothermal-sphere">Isothermal Sphere</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hernquist-potential">Hernquist Potential</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#time-integration">Time integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#message-passing-interface">Message Passing Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#single-double-precision">Single/Double Precision</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#groupfinder">Groupfinder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#subfind">Subfind</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#special-behavior">Special behavior</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#input-options">Input options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#special-input-options">Special input options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#output-fields">Output fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#output-options">Output options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#testing-and-debugging">Testing and Debugging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#re-gridding">Re-gridding</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="parameterfile.html">Parameterfile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="snapshotformat.html">Simulation output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="diagnosticfiles.html">Diagnostic output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="migration.html">Related codes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Code development</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="simtypes.html" title="previous chapter">Simulation examples</a></li>
+      <li>Next: <a href="parameterfile.html" title="next chapter">Parameterfile</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Max-Planck Institute for Astrophysics.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/config-options.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

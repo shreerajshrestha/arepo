@@ -1,0 +1,991 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Parameterfile &#8212; Arepo 1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Simulation output" href="snapshotformat.html" />
+    <link rel="prev" title="Code Configuration" href="config-options.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="parameterfile">
+<span id="id1"></span><h1>Parameterfile<a class="headerlink" href="#parameterfile" title="Permalink to this headline">¶</a></h1>
+<p>The parameter-file, often named param.txt, is a file containing
+run-time options for Arepo. These include things like the input and
+output directory, maximum runtimes, memory limits and all kinds of
+freely choosable simulation and model parameters. In general, the code
+will output an error message if there are either missing parameters
+for the given configuration Arepo was compiled with, or if there are
+extraneous parameters. The latter can be deactivated by setting the
+compile-time flag <code class="docutils literal notranslate"><span class="pre">ALLOWEXTRAPARAMS</span></code>.  Unlike changing Config.sh,
+changing the parameters does not require a re-compilation of the code.</p>
+<section id="initial-conditions">
+<h2>Initial conditions<a class="headerlink" href="#initial-conditions" title="Permalink to this headline">¶</a></h2>
+<p><strong>InitCondFile</strong></p>
+<blockquote>
+<div><p>The filename of the initial conditions file. Can be a relative or
+absolute path. The ICs can be distributed in one or more files, as
+with snapshots.  If ICs with multiple files are used, only the
+basename without the trailing “.n” should be specified
+here. Similarly, the “.hdf5” extension should be omitted, the code
+will automatically append it for <code class="docutils literal notranslate"><span class="pre">ICFormat=3</span></code>.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>ICFormat</strong></p>
+<blockquote>
+<div><p>The file format of the initial conditions. Currently, three
+different formats are supported, selected by one of the choices “1”,
+“2”, or “3”. Format “1” is the traditional Fortran-style unformatted
+binary format familiar from GADGET.  Format “2” is a variant of this
+format, where each block of data is preceded by a 4-character
+block-identifier. Finally, format “3” selects the HDF-5 format,
+which is the recommended format.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>InitGasTemp</strong></p>
+<blockquote>
+<div><p>This sets the initial gas temperature (assuming either a mean
+molecular weight corresponding to full ionization or full
+neutrality, depending on whether the temperature is above or below
+10^4 K) in Kelvin when initial conditions are read. However, the gas
+temperature is only set to a certain temperature if
+<code class="docutils literal notranslate"><span class="pre">InitGasTemp&gt;0</span></code>, and if the temperature of the gas particles in
+the initial conditions file is zero, otherwise the initial gas
+temperature is left at the value stored in the IC file.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>MinimumDensityOnStartUp</strong></p>
+<blockquote>
+<div><p>This sets a lower limit to the density of gas cells after reading in
+the ICs. All cells that have a lower density are set to this value.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>MHDSeedDir</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">MHD_SEEDFIELD</span></code></p>
+<blockquote>
+<div><p>Direction of the uniform B field that is set before starting the
+simulation.  The direction is encoded by sum(2^k), where k is the
+index of direction (0, 1, 2 for x, y, z, respectively). E.g. 3 is a
+diagonal field in the xy plane, parallel to the z axis. This allows
+only orientations along coordinate axes, perpendicular to them, or
+in diagonal orientations. Note that the equations of ideal MHD do
+not change if the field direction is reversed.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>MHDSeedValue</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">MHD_SEEDFIELD</span></code></p>
+<blockquote>
+<div><p>Value of the uniform initial magnetic field in comoving Gauss.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>TileICsFactor</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">TILE_ICS</span></code></p>
+<blockquote>
+<div><p>Factor by which the ICs are replicated in each dimension. Should be
+an integer. This can be useful for weak scaling tests.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>GridSize</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">ADDBACKGROUNDGRID</span></code></p>
+<blockquote>
+<div><p>Initial guess of grid size for <code class="docutils literal notranslate"><span class="pre">ADDBACKGROUNDGRID</span></code>. The input will
+be rounded to the nearest power of two.</p>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="output-file-names-and-formats">
+<h2>Output file names and formats<a class="headerlink" href="#output-file-names-and-formats" title="Permalink to this headline">¶</a></h2>
+<p><strong>OutputDir</strong></p>
+<blockquote>
+<div><p>Pathname of the output directory of the code. Can be a relative or
+absolute path. The output directory is created if it doesn’t exist,
+but the path to it must already exist.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>SnapshotFileBase</strong></p>
+<blockquote>
+<div><p>Basename of snapshot files produced by the code. e.g. <code class="docutils literal notranslate"><span class="pre">snap</span></code> for
+output files <code class="docutils literal notranslate"><span class="pre">snap_000.hdf5</span></code> etc.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>NumFilesPerSnapshot</strong></p>
+<blockquote>
+<div><p>The number of separate files requested for each snapshot dump. Each
+file of the snapshot will hold the data of one or several
+processors, up to all of them. <code class="docutils literal notranslate"><span class="pre">NumFilesPerSnapshot</span></code> must hence
+lie between 1 and the number of processors used. Distributing a
+snapshot onto several files can be done in parallel and may lead to
+much better I/O performance, depending on the hardware
+configuration. It can also help to avoid problems due to big files
+for large simulations. Note that initial conditions may also be
+distributed into several files, the number of which is automatically
+recognized by the code and does not have to be equal to
+<code class="docutils literal notranslate"><span class="pre">NumFilesPerSnapshot</span></code> (it may also be larger than the number of
+processors).</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>OutputListOn</strong></p>
+<blockquote>
+<div><p>If set to “1”, the code tries to read a list of desired output times
+from the file given in <code class="docutils literal notranslate"><span class="pre">OutputListFilename</span></code>. Otherwise, output
+times are generated equally spaced from the values assigned from
+<code class="docutils literal notranslate"><span class="pre">TimeOfFirstSnapshot</span></code> onwards with spacing <code class="docutils literal notranslate"><span class="pre">TimeBetSnapshot</span></code>.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>OutputListFilename</strong></p>
+<blockquote>
+<div><p>File with a list of the desired output times. Can be specified with
+a relative or absolute path.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>SnapFormat</strong></p>
+<blockquote>
+<div><p>Similar to <code class="docutils literal notranslate"><span class="pre">ICFormat</span></code>, this parameter selects the file-format of
+snapshot dumps produced by the code. 1 and 2 are two binary formats,
+identical to the ones in GADGET. 3 is an HDF5 output, which is
+recommended unless there are good reasons not to use it.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>NumFilesWrittenInParallel</strong></p>
+<blockquote>
+<div><p>The number of files the code may read or write simultaneously when
+writing or reading snapshot/restart files. If the value of this
+parameter is larger then the number of processors, it is capped by
+that. Restricting this parameter to something smaller than the
+number of MPI ranks is only important for quite large runs, where
+the file-system can be significantly affected and slowed down by too
+many tasks writing/reading (in particular restart files) at the same
+time.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>AlternativeOutputDir</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">TOLERATE_WRITE_ERROR</span></code></p>
+<blockquote>
+<div><p>Path name of an alternative output directory which is used in case
+output to OutputDir fails. Can be useful on flaky filesystems or
+machines.</p>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="output-frequency">
+<h2>Output frequency<a class="headerlink" href="#output-frequency" title="Permalink to this headline">¶</a></h2>
+<p><strong>CpuTimeBetRestartFile</strong></p>
+<blockquote>
+<div><p>The value specified here gives the time in seconds the code will run
+before it writes regularly produced restart files. This can be
+useful to protect against unexpected interruptions (for example due
+to a hardware problem) of a simulation, particularly if it is run
+for a long time. It is then possible to resume a simulation from the
+last restart file, reducing the potential loss to the elapsed
+CPU-time since this was produced.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>TimeBetSnapshot</strong></p>
+<blockquote>
+<div><p>The time interval in code units between two subsequent snapshot
+files in case a file with output times is not specified. For
+cosmological simulations, this is a multiplicative factor applied to
+the time of the last snapshot, such that the snapshots will have a
+constant logarithmic spacing in the scale factor. Otherwise, the
+parameter is an additive constant that gives the linear spacing
+between snapshot times.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>TimeBetStatistics</strong></p>
+<blockquote>
+<div><p>The code can be asked to measure the total kinetic, thermal, and
+potential energy in regular intervals, and to write the results to
+the file given in <code class="docutils literal notranslate"><span class="pre">energy.txt</span></code>. The time interval between two such
+measurements is given by this parameter, in an analogous way as with
+<code class="docutils literal notranslate"><span class="pre">TimeBetSnapshot</span></code>.  Note that the compile time option
+<code class="docutils literal notranslate"><span class="pre">EVALPOTENTIAL</span></code> needs to be activated to obtain a measurement of
+the gravitational potential energy.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>TimeOfFirstSnapshot</strong></p>
+<blockquote>
+<div><p>The time of the first desired snapshot file in code units in case a
+file with output times is not specified. For cosmological
+simulations, the value given here is the scale factor of the first
+desired output.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>FlushCpuTimeDiff</strong></p>
+<blockquote>
+<div><p>Time interval (in seconds) for flush calls on all log-files. In case
+<code class="docutils literal notranslate"><span class="pre">REDUCE_FLUSH</span></code> is not set, this is done during every sync-point.</p>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="cpu-time-limit-and-restarts">
+<h2>CPU-time limit and restarts<a class="headerlink" href="#cpu-time-limit-and-restarts" title="Permalink to this headline">¶</a></h2>
+<p><strong>TimeLimitCPU</strong></p>
+<blockquote>
+<div><p>CPU-time limit for the present submission of the code. If 85 percent
+of this time have been reached at the end of a timestep, the code
+terminates itself and produces restart files. The extra 15% is used
+to guarantee that there is enough time to safely finish the current
+time step and write the restart files. This CPU time refers to the
+wall-lock time on a single processor only.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>ResubmitOn</strong></p>
+<blockquote>
+<div><p>If set to “1”, the code will try to resubmit itself to the queuing
+system when an interruption of the run due to the CPU-time limit
+occurs. The resubmission itself is done by executing the
+program/script given with <code class="docutils literal notranslate"><span class="pre">ResubmitCommand</span></code>.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>ResubmitCommand</strong></p>
+<blockquote>
+<div><p>The name of a script file or program that is executed for automatic
+resubmission of the job to the queuing system. Note that the file
+given here needs to be executable. Note that a resubmission can also
+be triggered by a job-script itself, which is often the more
+convenient alternative.</p>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="memory-allocation">
+<h2>Memory allocation<a class="headerlink" href="#memory-allocation" title="Permalink to this headline">¶</a></h2>
+<p><strong>MaxMemSize</strong></p>
+<blockquote>
+<div><p>The memory allocated per MPI task, in megabytes. A contiguous memory
+area of this total size is allocated at startup, and then
+partitioned internally within Arepo for memory allocation and
+deallocation requests. Can generally be set up to ~95% of the total
+physical memory available per task, e.g. memory per node / number of
+MPI tasks per node, to leave room for operating system tasks and MPI
+buffers.  This value can be changed upon restart to increase the
+amount of memory available to each task. In case the code runs out
+of memory, it terminates and reports in detail how much has been
+alloacted for each array, and where this happened in the code.</p>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="simulated-time-span-and-spatial-extent">
+<h2>Simulated time span and spatial extent<a class="headerlink" href="#simulated-time-span-and-spatial-extent" title="Permalink to this headline">¶</a></h2>
+<p><strong>BoxSize</strong></p>
+<blockquote>
+<div><p>The box size for the simulation, in internal code units.  All
+particles and gas cells in the ICs must have coordinates within the
+range <code class="docutils literal notranslate"><span class="pre">[0,BoxSize]</span></code> in each dimension. The only exception from
+this is for collisionless particles in a tree-only gravity mode (no
+<code class="docutils literal notranslate"><span class="pre">PMGRID</span></code>) when <code class="docutils literal notranslate"><span class="pre">GRAVITY_NONPERIODIC</span></code> is set.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>PeriodicBoundariesOn</strong></p>
+<blockquote>
+<div><p>If set to “1”, periodic boundary conditions are assumed, with a
+cubical box-size of side-length <code class="docutils literal notranslate"><span class="pre">BoxSize</span></code>. Particle coordinates
+are expected to be in the range 0 to <code class="docutils literal notranslate"><span class="pre">BoxSize</span></code>. Can only be set to
+zero if <code class="docutils literal notranslate"><span class="pre">GRAVITY_NOT_PERIODIC</span></code> is set. Note: refers to gravity
+only. Hydrodynamic boundary conditions are handled by
+<code class="docutils literal notranslate"><span class="pre">REFLECTIVE_X</span></code>, <code class="docutils literal notranslate"><span class="pre">REFLECTIVE_Y</span></code>, and <code class="docutils literal notranslate"><span class="pre">REFLECTIVE_Z</span></code> in
+<code class="docutils literal notranslate"><span class="pre">Config.sh</span></code>.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>TimeBegin</strong></p>
+<blockquote>
+<div><p>This sets the starting time of a simulation when the code is started
+from initial conditions in internal code units. For cosmological
+integrations, the value specified here is taken as the initial scale
+factor.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>TimeMax</strong></p>
+<blockquote>
+<div><p>This sets the final time of the simulation. The code normally tries
+to run until this time is reached. For cosmological integrations,
+the value given here is the final scale factor.</p>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="cosmological-parameters">
+<h2>Cosmological parameters<a class="headerlink" href="#cosmological-parameters" title="Permalink to this headline">¶</a></h2>
+<p><strong>ComovingIntegrationOn</strong></p>
+<blockquote>
+<div><p>If set to “0”, the code assumes plain Newtonian physics, with time,
+positions, velocities, and masses measured in the internal system of
+units.  If set to “1”, the code assumes that a cosmological
+integration in comoving coordinates should be carried out, assuming
+an expanding universe described by the ‘Cosmological parameters’
+below. In a cosmological integration, the time variable is the scale
+factor.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>Omega0</strong></p>
+<blockquote>
+<div><p>Gives the total matter density in units of the critical density at
+z=0 for cosmological simulations. Relevant for comoving integration
+and halo/subhalo finder</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>OmegaBaryon</strong></p>
+<blockquote>
+<div><p>Gives the baryon density in units of the critical density at z=0 for
+cosmological simulations. Relevant for comoving integration,
+halo/subhalo finder and star formation model.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>OmegaLambda</strong></p>
+<blockquote>
+<div><p>Gives the vacuum energy density (cosmological constant) at z=0 for
+cosmological simulations. Relevant for comoving integration and
+halo/subhalo finder</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>HubbleParam</strong></p>
+<blockquote>
+<div><p>This gives the Hubble constant (“little h”) at z=0 in units of 100
+km/sec/Mpc.  Note that this parameter has been basically absorbed
+into the definition of the internal code units, such that for
+gravitational dynamics and adiabatic gas dynamics the actual value
+assigned for <code class="docutils literal notranslate"><span class="pre">HubbleParam</span></code> is not used by the code. Only used when
+conversions to proper (i.e. non-comoving) cgs units are required
+(e.g. for radiative cooling physics). In other cases, use 1.0.</p>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="system-of-units">
+<h2>System of units<a class="headerlink" href="#system-of-units" title="Permalink to this headline">¶</a></h2>
+<p><strong>UnitVelocity_in_cm_per_s</strong></p>
+<blockquote>
+<div><p>This sets the internal velocity unit in <strong>cm/s</strong>. For example, the
+choice of <code class="docutils literal notranslate"><span class="pre">1e5</span></code> sets the velocity unit to 1.0 km/s.  Note that
+the specification of <code class="docutils literal notranslate"><span class="pre">UnitLength_in_cm</span></code>, <code class="docutils literal notranslate"><span class="pre">UnitMass_in_g</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">UnitVelocity_in_cm_per_s</span></code> also determines the internal unit of
+time.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>UnitLength_in_cm</strong></p>
+<blockquote>
+<div><p>This sets the internal length unit in <strong>cm/h</strong>, where H_0 = 100 h
+km/sec/Mpc.  For example, the choice of <code class="docutils literal notranslate"><span class="pre">3.085678e21</span></code> sets the
+length unit to <cite>1.0 kpc/h</cite>.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>UnitMass_in_g</strong></p>
+<blockquote>
+<div><p>This sets the internal mass unit in <strong>g/h</strong>, where H_0 = 100 h
+km/s/Mpc.  For example, the choice of <code class="docutils literal notranslate"><span class="pre">1.989e43</span></code> sets the mass
+unit to <cite>10^10 Msun/h</cite>.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>GravityConstantInternal</strong></p>
+<blockquote>
+<div><p>The numerical value of the gravitational constant G in internal
+units depends on the system of units you choose. For example, for
+the choices above, <cite>G=43007.1</cite> in internal units.  For
+<code class="docutils literal notranslate"><span class="pre">GravityConstantInternal=0</span></code>, the code calculates the value
+corresponding to the physical value of G automatically.  However,
+you might want to set G yourself.  For example, by specifying:
+<code class="docutils literal notranslate"><span class="pre">GravityConstantInternal=1</span></code>, <code class="docutils literal notranslate"><span class="pre">UnitLength_in_cm=1</span></code>,
+<code class="docutils literal notranslate"><span class="pre">UnitMass_in_g=1</span></code>, and <code class="docutils literal notranslate"><span class="pre">UnitVelocity_in_cm_per_s=1</span></code>, one obtains
+a <em>natural</em> system of units.  Note that the code will nevertheless
+try to use the <em>correct</em> physical value of the Hubble constant in
+this case, so you should not set <code class="docutils literal notranslate"><span class="pre">GravityConstantInternal</span></code> in
+cosmological integrations.</p>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="gravitational-force-accuracy">
+<h2>Gravitational force accuracy<a class="headerlink" href="#gravitational-force-accuracy" title="Permalink to this headline">¶</a></h2>
+<p><strong>TypeOfOpeningCriterion</strong></p>
+<blockquote>
+<div><p>This selects the type of cell-opening criterion used in the tree
+walks. A value of <code class="docutils literal notranslate"><span class="pre">1</span></code> selects the relative opening criterion
+(normally recommened), whereas a value of 0 uses a simple geometric
+Barnes &amp; Hut opening criterion.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>ErrTolTheta</strong></p>
+<blockquote>
+<div><p>If the relative opening criterion is used, the first force estimate
+is computed using the Barnes-Hut opening criterion with this opening
+angle. The first forces are then recomputed with the relative
+opening criterion, which is subsequently used. If the geometric
+criterion is used, all forces are computed with this opening angle.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>ErrTolForceAcc</strong></p>
+<blockquote>
+<div><p>The accuracy parameter for the relative opening criterion for the
+tree walk.  Only used if <code class="docutils literal notranslate"><span class="pre">TypeOfOpeningCriterion</span></code> equal to 1.</p>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="time-integration-accuracy">
+<h2>Time integration accuracy<a class="headerlink" href="#time-integration-accuracy" title="Permalink to this headline">¶</a></h2>
+<p><strong>TypeOfTimestepCriterion</strong></p>
+<blockquote>
+<div><p>This parameter can in principle be used to select different kinds of
+timestep criteria for gravitational dynamics. However, Arepo
+presently only supports the criterion <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>ErrTolIntAccuracy</strong></p>
+<blockquote>
+<div><p>This dimensionless parameter controls the accuracy of the timestep
+criterion selected by <code class="docutils literal notranslate"><span class="pre">TypeOfTimestepCriterion</span></code>. It is the
+variable <code class="docutils literal notranslate"><span class="pre">eta</span></code>, where the cosmological timestep for collisionless
+particles scales as <cite>dt ~ eta^0.5</cite>.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>MaxSizeTimestep</strong></p>
+<blockquote>
+<div><p>This gives the maximum timestep a particle may take. This should be
+set to a sensible value in order to protect against too large
+timesteps for particles with very small acceleration. For
+cosmological simulations, the parameter given here is the maximum
+allowed step in terms of the logarithm of the expansion factor. For
+comoving runs, this is in units of <code class="docutils literal notranslate"><span class="pre">dln(a)</span></code>.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>MinSizeTimestep</strong></p>
+<blockquote>
+<div><p>If a particle requests a timestep smaller than the value specified
+here, the code will normally terminate with a warning message. If
+compiled with the <code class="docutils literal notranslate"><span class="pre">NOSTOP_WHEN_BELOW_MINTIMESTEP</span></code> option, the code
+will instead force the timesteps to be at least as large as
+<code class="docutils literal notranslate"><span class="pre">MinSizeTimestep</span></code>.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>CourantFac</strong></p>
+<blockquote>
+<div><p>This sets the value of the Courant parameter used in the
+determination of the hydrodynamical timestep of gas cells. The
+hydrodynamical timestep is this value times the
+Courant–Friedrichs–Lewy (CFL) condition calculated for each cell.</p>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="domain-decomposition">
+<h2>Domain decomposition<a class="headerlink" href="#domain-decomposition" title="Permalink to this headline">¶</a></h2>
+<p><strong>ActivePartFracForNewDomainDecomp</strong></p>
+<blockquote>
+<div><p>Fraction of particles that need to be at least active in order to
+trigger a new domain decomposition at a sync-point. All sync-points
+where fewer particles are active will not perform a domain
+decomposition.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>MultipleDomains</strong></p>
+<blockquote>
+<div><p>Number of domains per MPI task. Consequently, the domain
+decomposition will cut the computational box into a number of chunks
+equal to <code class="docutils literal notranslate"><span class="pre">MultipleDomains</span></code> times the number of tasks.  Too few of
+them make it hard to reach good CPU- and memory-load at the same
+time, too many cause more MPI communication due to a larger surface
+area of the domain boundaries.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>TopNodeFactor</strong></p>
+<blockquote>
+<div><p>Determines how fine the top-level tree is constructed (1.0: only as
+far as necessary to split the domain in the required number of
+chunks). The higher this factor is, the more precise the
+Peano-Hilbert curve can be cut into equal pieces of cpu and memory
+load. A higher value, however, increases the size of the top-level
+tree, which is stored on every MPI task, thus the total memory
+requirements.</p>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="moving-mesh">
+<h2>Moving mesh<a class="headerlink" href="#moving-mesh" title="Permalink to this headline">¶</a></h2>
+<p><strong>DesNumNgb</strong></p>
+<blockquote>
+<div><p>This sets the desired number of nearest neighbors for an initial
+density/size estimate for gas cells during code startup.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>MaxNumNgbDeviation</strong></p>
+<blockquote>
+<div><p>This sets the allowed variation of the number of neighbors around
+the target value <code class="docutils literal notranslate"><span class="pre">DesNumNgb</span></code>. A larger tolerance will reduce the
+number of iterations needed to find the correct radius.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>MaxVolumeDiff</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">REFINEMENT_VOLUME_LIMIT</span></code></p>
+<blockquote>
+<div><p>Maximum tolerated difference in the volume of two neighboring
+cells. This avoids large cell-size gradients in the mesh which might
+cause numerical inaccuracies.  In case where the volume of a cell
+exceeds <code class="docutils literal notranslate"><span class="pre">MaxVolumeDiff</span></code> times the volume of the smallest
+neighboring cell, the cell is refined, irrespective of other
+refinement criteria.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>MinVolume</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">REFINEMENT_VOLUME_LIMIT</span></code></p>
+<blockquote>
+<div><p>Global minimum volume a cell is allowed to have, irrespective of
+other refinement and derefinement criteria.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>MaxVolume</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">REFINEMENT_VOLUME_LIMIT</span></code></p>
+<blockquote>
+<div><p>Global maximum volume a cell is allowed to have, irrespective of
+other refinement and derefinement criteria.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>MeanVolume</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">NODEREFINE_BACKGROUND_GRID</span></code></p>
+<blockquote>
+<div><p>Mean volume of cells. In case <code class="docutils literal notranslate"><span class="pre">NODEREFINE_BACKGROUND_GRID</span></code> is
+activated, cells with more than 10% or this volume will not be
+derefined. Used for cosmological zoom simulations.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>CellMaxAngleFactor</strong></p>
+<blockquote>
+<div><p>not for <code class="docutils literal notranslate"><span class="pre">VORONOI_STATIC_MESH</span></code>, requires <code class="docutils literal notranslate"><span class="pre">REGULARIZE_MESH_FACE_ANGLE</span></code></p>
+<p>Cell “roundness” criterion.  The face angle of an interface of a
+cell is defined as the square root of its area divided by pi, and
+divided by the distance to the face. The maximum face angle is the
+maximum of this values for all faces in a given cell. This value is
+a measure for the “roundness” of a cell.  If this value exceeds 1.5
+times <code class="docutils literal notranslate"><span class="pre">CellMaxAngleFactor</span></code>, the cell is not allowed to be refined,
+i.e. highly elongated cells are not allowed to be refined. In
+addition to this, if the cell exceeds 0.75 times
+<code class="docutils literal notranslate"><span class="pre">CellMaxAngleFactor</span></code>, the movement of the mesh-generating point
+will deviate from the pure Lagrangian motion to make the cell
+rounder.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>CellShapingFactor</strong></p>
+<blockquote>
+<div><p>not for <code class="docutils literal notranslate"><span class="pre">VORONOI_STATIC_MESH</span></code>, not for <code class="docutils literal notranslate"><span class="pre">REGULARIZE_MESH_FACE_ANGLE</span></code></p>
+<p>Alternative “roundness” criterion. This criterion uses the distance
+between center of mass and mesh-generating point as a measure for
+roundness. If this distance exceeds twice the cell radius times
+<code class="docutils literal notranslate"><span class="pre">CellShapingFactor</span></code>, the cell will not be refined.  If this
+distance exceeds 0.75 times the cell radius times
+<code class="docutils literal notranslate"><span class="pre">CellShapingFactor</span></code> the movement of the mesh-generating point will
+deviate from pure Lagrangian motion to make the cell rounder.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>CellShapingSpeed</strong></p>
+<blockquote>
+<div><p>not for <code class="docutils literal notranslate"><span class="pre">VORONOI_STATIC_MESH</span></code></p>
+<p>Determines the speed of the regularization of the mesh.
+<code class="docutils literal notranslate"><span class="pre">CellShapingSpeed</span></code> (times a characteristic speed) is the speed by
+which the mesh is regularized (i.e. speed by which the motion of a
+mesh-generating point can deviate from Lagrangian motion).  Higher
+values will lead to round cells in fewer timesteps, but will also
+introduce more numerical noise.</p>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="refinement-and-derefinement">
+<h2>Refinement and derefinement<a class="headerlink" href="#refinement-and-derefinement" title="Permalink to this headline">¶</a></h2>
+<p><strong>ReferenceGasPartMass</strong></p>
+<blockquote>
+<div><p>for active <code class="docutils literal notranslate"><span class="pre">REFINEMENT</span></code></p>
+<p>For comoving runs, this can either be given a non-zero value, in
+which case this value times <code class="docutils literal notranslate"><span class="pre">MassFactor</span></code> is used as the target
+mass, or it can be given the value 0, in which case the code
+calculates the mean cell mass automatically. For non-comoving runs,
+it must be given a non-zero value, otherwise the run will exit.  If
+<code class="docutils literal notranslate"><span class="pre">REFINEMENT_HIGH_RES_GAS</span></code> is enabled, then: if
+ReferenceGasPartMass==0 in the parameter file, then all gas present
+in the ICs will be allowed to be (de-)refined (and the code
+calculates the reference mass as the mean mass of those cells for
+which (de-)refinement is allowed), and if that is not desired, then
+ReferenceGasPartMass should be set to the correct value, in which
+case only gas with initial mass&lt;1.2*ReferenceGasPartMass will be
+allowed to be (de-)refined.  In case of <code class="docutils literal notranslate"><span class="pre">GENERATE_GAS_IN_ICS</span></code>,
+only the gas cells split off from particle type 1 (usually the
+high-res dark matter particles) are flagged for (de-)refinement,
+i.e. only these gas cells will be considered for the
+<code class="docutils literal notranslate"><span class="pre">ReferenceGasPartMass</span></code> calculation (only in case
+<code class="docutils literal notranslate"><span class="pre">ReferenceGasPartMass=0</span></code> in parameter file).</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>TargetGasMassFactor</strong></p>
+<blockquote>
+<div><p>for <code class="docutils literal notranslate"><span class="pre">REFINEMENT</span></code></p>
+<p>The target gas cell mass, where (de-)refinement is triggered if a
+given cell deviates by more than a factor of 2.0 above or below this
+value.  Multiplicative factor with respect to the mean cell mass.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>RefinementCriterion</strong></p>
+<blockquote>
+<div><p>only for <code class="docutils literal notranslate"><span class="pre">REFINEMENT</span></code></p>
+<p>Selects the criterion for refinement; “0” no refinement, “1” target
+mass refinement, “2” Jeans stability refinement criterion. Adding
+additional criteria is easily possible, but requires code
+modifications.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>DerefinementCriterion</strong></p>
+<blockquote>
+<div><p>only for <code class="docutils literal notranslate"><span class="pre">REFINEMENT</span></code></p>
+<p>Selects the criterion for derefinement; “0” no derefinement, “1”
+target mass derefinement, “2” Jeans stability derefinement
+criterion.</p>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="hydrodynamics">
+<h2>Hydrodynamics<a class="headerlink" href="#hydrodynamics" title="Permalink to this headline">¶</a></h2>
+<p><strong>LimitUBelowThisDensity</strong></p>
+<blockquote>
+<div><p>Density threshold for a specific thermal energy lower limit for low
+density gas.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>LimitUBelowCertainDensityToThisValue</strong></p>
+<blockquote>
+<div><p>Minimum specific thermal energy for low density gas.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>MinGasTemp</strong></p>
+<blockquote>
+<div><p>A minimum temperature floor imposed by the code. This may be set to
+zero, but it may be desirable to prevent the gas from becoming too
+cold, e.g. for resolution reasons or because of lower limits in the
+implemented cooling function. (This value is converted by the code
+to a minimum thermal energy per unit mass assuming the mean
+molecular weight of neutral gas).</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>MinEgySpec</strong></p>
+<blockquote>
+<div><p>Minimum specific energy allowed in a gas cell. If specific energy is
+smaller than the value specified here, Arepo will add additional
+thermal energy in this cell such that it reaches a specific thermal
+energy of <code class="docutils literal notranslate"><span class="pre">MinEgySpec</span></code>.  This is mainly as a protection against
+negative specific energies emerging from numerical round-off errors
+in kinetically or magnetically dominated cells (keep in mind that
+the thermal energy is recomputed from the total energy in Arepo).
+In case this parameter is nonzero, it overrides <code class="docutils literal notranslate"><span class="pre">MinGasTemp</span></code>.  If
+this is zero, internally, <code class="docutils literal notranslate"><span class="pre">MinEgySpec</span></code> will be calculated via the
+value of <code class="docutils literal notranslate"><span class="pre">MinGasTemp</span></code>. In case both <code class="docutils literal notranslate"><span class="pre">MinEgySpec</span></code> and
+<code class="docutils literal notranslate"><span class="pre">MinGasTemp</span></code> are nonzero, <code class="docutils literal notranslate"><span class="pre">MinGasTemp</span></code> will only set a lower
+limit to the cooling.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>IsoSoundSpeed</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">ISOTHERM_EQS</span></code></p>
+<p>Sound speed of gas in runs with isothermal hydrodynamics.</p>
+</section>
+<hr class="docutils" />
+<section id="gravitational-softening">
+<h2>Gravitational softening<a class="headerlink" href="#gravitational-softening" title="Permalink to this headline">¶</a></h2>
+<p><strong>GasSoftFactor</strong></p>
+<blockquote>
+<div><p>The gravitational softening length of a gas cell is this value times
+the cell size, which is calculated as the radius of the
+volume-equilvalent sphere.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>SofteningComovingTypeX</strong></p>
+<blockquote>
+<div><p>A Plummer equivalent gravitational softening length, to be
+referenced by one or more specific particle types. For cosmological
+simulations in comoving coordinates, this is interpreted as a
+comoving softening length in code length units.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>SofteningMaxPhysTypeX</strong></p>
+<blockquote>
+<div><p>When comoving integration is used, this parameter gives the maximum
+physical gravitational softening length corresponding to
+<code class="docutils literal notranslate"><span class="pre">SofteningComovingTypeX</span></code> (referenced by one or more specific
+particle types depending on the entries of
+<code class="docutils literal notranslate"><span class="pre">SofteningTypeOfPartTypeN</span></code>).  Depending on the relative settings
+of the <em>Comoving</em> and <em>MaxPhys</em> softenings, the code will hence
+switch from a softening constant in comoving units to one constant
+in physical units. For example, if the <em>MaxPhys</em> value is exactly
+half the <em>Comoving</em> value, then particles using this softening type
+will have comoving softening until <cite>z=1</cite> and fixed physical
+softenings after that point in time. Given in code length units.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>SofteningTypeOfPartTypeX</strong></p>
+<blockquote>
+<div><p>For each particle type in the simulation which is involved in
+gravitational calculations, a “softening type” must be assigned,
+i.e. an integer index referring to one of the above
+<code class="docutils literal notranslate"><span class="pre">SofteningComovingTypeX</span></code>/<code class="docutils literal notranslate"><span class="pre">SofteningMaxPhysTypeX</span></code> entry pairs.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>MinimumComovingHydroSoftening</strong></p>
+<blockquote>
+<div><p>for <code class="docutils literal notranslate"><span class="pre">ADAPTIVE_HYDRO_SOFTENING</span></code></p>
+<p>If this treatment for gas softenings is used, a discrete spectrum of
+possible softening lengths for gas cells is created at startup. It
+contains <code class="docutils literal notranslate"><span class="pre">NSOFTTYPES_HYDRO</span></code> entries, controlled by this ‘minimum’
+parameter and the following ‘spacing’ parameter (as a multiplicative
+factor). Given in code length units.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>AdaptiveHydroSofteningSpacing</strong></p>
+<blockquote>
+<div><p>only for <code class="docutils literal notranslate"><span class="pre">ADAPTIVE_HYDRO_SOFTENING</span></code></p>
+<p>The logarithmic spacing for the adaptive gas softenings table, as
+described above. This is the multiplicative factor by which the next
+discrete softening length larger than the previous one is
+calculated. Consequently, this must be larger than unity.</p>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="subfind-parameters">
+<h2>Subfind parameters<a class="headerlink" href="#subfind-parameters" title="Permalink to this headline">¶</a></h2>
+<p><strong>DesLinkNgb</strong></p>
+<blockquote>
+<div><p>for <code class="docutils literal notranslate"><span class="pre">SUBFIND</span></code></p>
+<p>The (integer) minimum number of particles/cells, of all types, for
+Subfind groups. If a Subfind group is identified with fewer than
+this number of total particles/cells, it is discarded. Note that
+this means many small friends-of-friends groups (with a nominal
+minimum number of 32 member particles) may frequently have no
+sufficiently large Subfind groups, and so will have
+<code class="docutils literal notranslate"><span class="pre">GroupFirstSub==-1</span></code> indicating that that FoF has no central
+subhalo in addition to no satellite subhalos.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>ErrTolThetaSubfind</strong></p>
+<blockquote>
+<div><p>for <code class="docutils literal notranslate"><span class="pre">SUBFIND</span></code></p>
+<p>This has the same meaning as the <code class="docutils literal notranslate"><span class="pre">ErrTolTheta</span></code> parameter, i.e. the tree
+opening angle used to control the accuracy of the gravity calculation, for
+use within the Subfind algorithm to compute the gravitational
+binding potential of halos and substructure candidates.</p>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="cooling-and-star-formation">
+<h2>Cooling and star formation<a class="headerlink" href="#cooling-and-star-formation" title="Permalink to this headline">¶</a></h2>
+<p><strong>CoolingOn</strong></p>
+<blockquote>
+<div><p>If set to “1”, gas looses energy through a (optically-thin)
+radiative cooling model at each timestep. Can only be set to zero if
+<code class="docutils literal notranslate"><span class="pre">COOLING</span></code> is not set.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>StarformationOn</strong></p>
+<blockquote>
+<div><p>If set to “1”, gas can be (stochastically) converted into
+collisionless star particles based on a star formation model.  Can
+only be set to zero if <code class="docutils literal notranslate"><span class="pre">USE_SFR</span></code> is not set.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>TreecoolFile</strong></p>
+<blockquote>
+<div><p>for <code class="docutils literal notranslate"><span class="pre">COOLING</span></code></p>
+<p>File path to cooling file. Possible files are available under
+<code class="docutils literal notranslate"><span class="pre">./data/</span></code>.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>CritOverDensity</strong></p>
+<blockquote>
+<div><p>only if <code class="docutils literal notranslate"><span class="pre">USE_SFR</span></code> is active</p>
+<p>The critical (over-)density above which star formation may take
+place, where the threshold density is then computed as</p>
+<p>rho_th = <code class="docutils literal notranslate"><span class="pre">CritOverDensity</span></code> 3 <code class="docutils literal notranslate"><span class="pre">Omega_b</span></code> H^2 / (8 pi G)</p>
+<p>(redshift independent). Used in place of a critical physical density
+for comoving integrations.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>TemperatureThresh</strong></p>
+<blockquote>
+<div><p>for <code class="docutils literal notranslate"><span class="pre">USE_SFR</span></code></p>
+<p>Star formation is prevented for cells which are hotter than the eEOS,
+and hotter than the TemperatureThresh parameter (in Kelvin). If this
+parameter is very large (e.g. 1e20), then nothing is changed
+compared to the base model.  If this parameter is small (e.g. 0,
+1e4, or 1e5) then star-formation will be prevented in hot halo gas.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>CritPhysDensity</strong></p>
+<blockquote>
+<div><p>for <code class="docutils literal notranslate"><span class="pre">USE_SFR</span></code></p>
+<p>The critical physical density above which star formation may take
+place (in <cite>cm^-3</cite>). Used instead of <code class="docutils literal notranslate"><span class="pre">CritOverDensity</span></code> for
+non-comoving runs.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>FactorSN</strong></p>
+<blockquote>
+<div><p>for <code class="docutils literal notranslate"><span class="pre">USE_SFR</span></code></p>
+<p>The variable giving the mass fraction of massive stars (<code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">8</span>
+<span class="pre">Msun</span></code>) formed for each initial population of stars. This is thus
+determined by the stellar IMF.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>FactorEVP</strong></p>
+<blockquote>
+<div><p>for <code class="docutils literal notranslate"><span class="pre">USE_SFR</span></code></p>
+<p>The variable <code class="docutils literal notranslate"><span class="pre">A</span></code> from the Springel &amp; Hernquist (2003) model,
+giving the efficiency of the cloud evaporation process.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>TempSupernova</strong></p>
+<blockquote>
+<div><p>for <code class="docutils literal notranslate"><span class="pre">USE_SFR</span></code></p>
+<p>The “supernova temperature” <code class="docutils literal notranslate"><span class="pre">T_SN</span></code> of the hot inter-cloud medium
+in Kelvin, as defined in the above model.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>TempClouds</strong></p>
+<blockquote>
+<div><p>for <code class="docutils literal notranslate"><span class="pre">USE_SFR</span></code></p>
+<p>The “cold cloud temperature” <code class="docutils literal notranslate"><span class="pre">T_c</span></code>, in Kelvin, in the Springel &amp;
+Hernquist (2003) model.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>MaxSfrTimescale</strong></p>
+<blockquote>
+<div><p>for <code class="docutils literal notranslate"><span class="pre">USE_SFR</span></code></p>
+<p>This is the star-formation timescale <code class="docutils literal notranslate"><span class="pre">t_0</span></code> at the threshold density, such that
+the local star-formation timescale is then calculated as</p>
+<p>t_star(rho) = t_0 (rho / rho_th)^-0.5</p>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="sphericaly-symmetric-simulations">
+<h2>Sphericaly symmetric simulations<a class="headerlink" href="#sphericaly-symmetric-simulations" title="Permalink to this headline">¶</a></h2>
+<p><strong>CoreRadius</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">ONEDIMS_SPHERICAL</span></code></p>
+<blockquote>
+<div><p>Inner radius (position of boundary conditions) of 1d spherical
+simulation.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>CoreMass</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">ONEDIMS_SPHERICAL</span></code></p>
+<blockquote>
+<div><p>Mass enclosed within the inner boundary radius in 1d spherical
+simulations.  Required for gravity calculation.</p>
+</div></blockquote>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Arepo</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="running.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simtypes.html">Simulation examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config-options.html">Code Configuration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Parameterfile</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#initial-conditions">Initial conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#output-file-names-and-formats">Output file names and formats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#output-frequency">Output frequency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cpu-time-limit-and-restarts">CPU-time limit and restarts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#memory-allocation">Memory allocation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#simulated-time-span-and-spatial-extent">Simulated time span and spatial extent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cosmological-parameters">Cosmological parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#system-of-units">System of units</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#gravitational-force-accuracy">Gravitational force accuracy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#time-integration-accuracy">Time integration accuracy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#domain-decomposition">Domain decomposition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#moving-mesh">Moving mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#refinement-and-derefinement">Refinement and derefinement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hydrodynamics">Hydrodynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#gravitational-softening">Gravitational softening</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#subfind-parameters">Subfind parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cooling-and-star-formation">Cooling and star formation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sphericaly-symmetric-simulations">Sphericaly symmetric simulations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="snapshotformat.html">Simulation output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="diagnosticfiles.html">Diagnostic output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="migration.html">Related codes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Code development</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="config-options.html" title="previous chapter">Code Configuration</a></li>
+      <li>Next: <a href="snapshotformat.html" title="next chapter">Simulation output</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Max-Planck Institute for Astrophysics.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/parameterfile.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

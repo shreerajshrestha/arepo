@@ -1,0 +1,1109 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Simulation output &#8212; Arepo 1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Diagnostic output" href="diagnosticfiles.html" />
+    <link rel="prev" title="Parameterfile" href="parameterfile.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="simulation-output">
+<h1>Simulation output<a class="headerlink" href="#simulation-output" title="Permalink to this headline">¶</a></h1>
+<section id="particle-data">
+<h2>Particle data<a class="headerlink" href="#particle-data" title="Permalink to this headline">¶</a></h2>
+<p>Arepo supports various formats for in- and output, which are essentially the same
+as in Gadget-2. Format 1 and format 2 are binary outputs and the main reason
+why they are still supported is to allow the use of initial conditions from
+well-tested initial condition codes that write one of these formats.
+For output (or when creating new initial condition generating code), the
+authors recommend the format 3, which is an HDF5 format. Many of the examples
+create the initial conditions in HDF5 with the <code class="docutils literal notranslate"><span class="pre">examples/*/create.py</span></code> python
+script.</p>
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text"><strong>Fields for the particle data output</strong></span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 5%" />
+<col style="width: 39%" />
+<col style="width: 46%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field name</p></th>
+<th class="head"><p>Block ID</p></th>
+<th class="head"><p>Units</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Coordinates</p></td>
+<td><p>POS</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(a \, h^{-1}\)</span></p></td>
+<td><p>Comoving position; for cells: position of mesh-generating point</p></td>
+</tr>
+<tr class="row-odd"><td><p>Velocities</p></td>
+<td><p>VEL</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(a^{0.5}\)</span></p></td>
+<td><p>Velocity</p></td>
+</tr>
+<tr class="row-even"><td><p>ParticleIDs</p></td>
+<td><p>ID</p></td>
+<td></td>
+<td><p>Unique ID of particle</p></td>
+</tr>
+<tr class="row-odd"><td><p>Masses</p></td>
+<td><p>MASS</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(h^{-1}\)</span></p></td>
+<td><p>Mass, if not present: header/MassTable</p></td>
+</tr>
+<tr class="row-even"><td><p>Potential</p></td>
+<td><p>POT</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitVelocity}^2\)</span> <span class="math notranslate nohighlight">\(a^{-1}\)</span></p></td>
+<td><p>Gravitational potential energy (<code class="docutils literal notranslate"><span class="pre">OUTPUTPOTENTIAL</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>InternalEnergy</p></td>
+<td><p>U</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitVelocity}^2\)</span></p></td>
+<td><p>Specific internal energy</p></td>
+</tr>
+<tr class="row-even"><td><p>Density</p></td>
+<td><p>RHO</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}^{-3}\)</span> <span class="math notranslate nohighlight">\(a^{-3} \, h^2\)</span></p></td>
+<td><p>Density of gas</p></td>
+</tr>
+<tr class="row-odd"><td><p>Pressure</p></td>
+<td><p>PRES</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitLength}^{-3}\)</span> <span class="math notranslate nohighlight">\(\text{UnitMass}^1\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}^2\)</span> <span class="math notranslate nohighlight">\(a^{-3} \, h^2\)</span></p></td>
+<td><p>Thermal pressure of gas (<code class="docutils literal notranslate"><span class="pre">OUTPUT_PRESSURE</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p>SoundSpeed</p></td>
+<td><p>CSND</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span></p></td>
+<td><p>Effective sound speed of both thermal and magnetic component (note different <cite>a</cite> scaling compared to VEL!) (<code class="docutils literal notranslate"><span class="pre">OUTPUT_CSND</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ElectronAbundance</p></td>
+<td><p>NE</p></td>
+<td></td>
+<td><p>Electron number density relative to hydrogen (<code class="docutils literal notranslate"><span class="pre">COOLING</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p>NeutralHydrogenAbundance</p></td>
+<td><p>NH</p></td>
+<td></td>
+<td><p>Neutral hydrogen fraction (<code class="docutils literal notranslate"><span class="pre">COOLING</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>StarFormationRate</p></td>
+<td><p>SFR</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{Msun} \, \text{yr}^{-1}\)</span></p></td>
+<td><p>Star formation rate (<code class="docutils literal notranslate"><span class="pre">USE_SFR</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p>VelocityDivergence</p></td>
+<td><p>DIVV</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}^{-1}\)</span> <span class="math notranslate nohighlight">\(h\)</span></p></td>
+<td><p>Velocity divergence SUM(w*area)/Volume(<code class="docutils literal notranslate"><span class="pre">OUTPUT_DIVVEL</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>VelocityCurl</p></td>
+<td><p>ROTV</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}^{-1}\)</span> <span class="math notranslate nohighlight">\(h\)</span></p></td>
+<td><p>Rotation of velocity, proper velocity incl. Hubble flow, gradient with respect to comoving coordinates(<code class="docutils literal notranslate"><span class="pre">OUTPUT_CURLVEL</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p>CoolingHeatingEnergy</p></td>
+<td><p>COHE</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitLength}^{-1}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}^3\)</span> <span class="math notranslate nohighlight">\(\text{UnitMass}\)</span></p></td>
+<td><p>Actual cooling rate, differing from nominal cooling rate in star forming cells (<code class="docutils literal notranslate"><span class="pre">OUTPUT_COOLHEAT</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>SurfaceArea</p></td>
+<td><p>AREA</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitLength}^2\)</span> <span class="math notranslate nohighlight">\(a^2 \, h^{-2}\)</span></p></td>
+<td><p>Surface area of a Voronoi cell (<code class="docutils literal notranslate"><span class="pre">OUTPUT_SURFACE_AREA</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p>NumFacesCell</p></td>
+<td><p>NFAC</p></td>
+<td></td>
+<td><p>Number of faces of a Voronoi cell (<code class="docutils literal notranslate"><span class="pre">OUTPUT_SURFACE_AREA</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>CoolingRate</p></td>
+<td><p>COOR</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{erg} \, \text{cm}^3 \, \text{s}^{-1}\)</span></p></td>
+<td><p>The cooling rate of a gas cell (e.g. Lambda_net/n_H^2). (<code class="docutils literal notranslate"><span class="pre">OUTPUTCOOLRATE</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p>Vorticity</p></td>
+<td><p>VORT</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}^{-1}\)</span> <span class="math notranslate nohighlight">\(h\)</span></p></td>
+<td><p>Vorticity of a cell (<code class="docutils literal notranslate"><span class="pre">OUTPUT_VORTICITY</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>PressureGradient</p></td>
+<td><p>GRAP</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitLength}^{-4}\)</span> <span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}^2\)</span> <span class="math notranslate nohighlight">\(a^{-4} \, h^3\)</span></p></td>
+<td><p>Gradient of the pressure (limited) (<code class="docutils literal notranslate"><span class="pre">OUTPUT_PRESSURE_GRADIENT</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p>DensityGradient</p></td>
+<td><p>GRAR</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitLength}^{-4}\)</span> <span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(a^{-4} \, h^3\)</span></p></td>
+<td><p>Gradient of the density (limited) (<code class="docutils literal notranslate"><span class="pre">OUTPUT_DENSITY_GRADIENT</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>VelocityGradient</p></td>
+<td><p>GRAV</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitLength}^{-1}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}^1\)</span> <span class="math notranslate nohighlight">\(h\)</span></p></td>
+<td><p>Gradient of the velocity (limited), proper velocity incl. Hubble flow, gradient wrt comoving coord. (<code class="docutils literal notranslate"><span class="pre">OUTPUT_VELOCITY_GRADIENT</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p>BfieldGradient</p></td>
+<td><p>GRAB</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}^{0.5}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}^{-5/2}\)</span> <span class="math notranslate nohighlight">\(h^2 \, a^{-3}\)</span></p></td>
+<td><p>Gradient of the magnetic field (limited) (<code class="docutils literal notranslate"><span class="pre">OUTPUT_BFIELD_GRADIENT</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Volume</p></td>
+<td><p>VOL</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitLength}^3\)</span> <span class="math notranslate nohighlight">\(a^3 \, h^{-3}\)</span></p></td>
+<td><p>(comoving) volume of gas cell. Can be calculated by Masses / Density. (<code class="docutils literal notranslate"><span class="pre">OUTPUT_VOLUME</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p>VertexVelocity</p></td>
+<td><p>VEVE</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(a^1\)</span></p></td>
+<td><p>velocity of the mesh-generating point (<code class="docutils literal notranslate"><span class="pre">OUTPUT_VERTEX_VELOCITY</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>MaxFaceAngle</p></td>
+<td><p>FACA</p></td>
+<td></td>
+<td><p>Maximum face angle of cell, quantifies roundness (<code class="docutils literal notranslate"><span class="pre">OUTPUT_MESH_FACE_ANGLE</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p>CenterOfMass</p></td>
+<td><p>CMCE</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(a^1 \, h^{-1}\)</span></p></td>
+<td><p>Center of mass of cell. Generally not equal to position of mesh generating point <code class="docutils literal notranslate"><span class="pre">POS</span></code> (<code class="docutils literal notranslate"><span class="pre">OUTPUT_CENTER_OF_MASS</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>task</p></td>
+<td><p>TASK</p></td>
+<td></td>
+<td><p>MPI task this particle is at (<code class="docutils literal notranslate"><span class="pre">OUTPUT_TASK</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p>TimebinHydro</p></td>
+<td><p>TBH</p></td>
+<td></td>
+<td><p>Time bin the cell is at (<code class="docutils literal notranslate"><span class="pre">OUTPUT_TIMEBIN_HYDRO</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>TimeStep</p></td>
+<td><p>TSTP</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}^{-1}\)</span> <span class="math notranslate nohighlight">\(h^{-1}\)</span></p></td>
+<td><p>Timestep in code units (<code class="docutils literal notranslate"><span class="pre">OUTPUTTIMESTEP</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p>Acceleration</p></td>
+<td><p>ACCE</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitVelocity}^2\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}^{-1}\)</span> <span class="math notranslate nohighlight">\(a^{-1} \, h\)</span></p></td>
+<td><p>Acceleration due to gravitational forces, including external potential; different a scaling than internally!(<code class="docutils literal notranslate"><span class="pre">OUTPUTACCELERATION</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Softenings</p></td>
+<td><p>SOFT</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(a \, h^{-1}\)</span></p></td>
+<td><p>Gravitational softening length of particle/cell (<code class="docutils literal notranslate"><span class="pre">OUTPUT_SOFTENINGS</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p>GravityInteractions</p></td>
+<td><p>GINT</p></td>
+<td></td>
+<td><p>Number of force calculations in tree (<code class="docutils literal notranslate"><span class="pre">OUTPUTGRAVINTERACTIONS</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>MagneticField</p></td>
+<td><p>BFLD</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitLength}^{-1.5}\)</span> <span class="math notranslate nohighlight">\(\text{UnitMass}^{0.5}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(h \, a^{-2}\)</span></p></td>
+<td><p>Magnetic field (in code units but Gauss system; note that internally, the Heaviside-Lorentz system is used) (<code class="docutils literal notranslate"><span class="pre">MHD</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p>MagneticFieldDivergence</p></td>
+<td><p>DIVB</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitLength}^{-2.5}\)</span> <span class="math notranslate nohighlight">\(\text{UnitMass}^{0.5}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(h^2 \, a^{-3}\)</span></p></td>
+<td><p>Divergence of magnetic field (<code class="docutils literal notranslate"><span class="pre">MHD</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>PassiveScalars</p></td>
+<td><p>PASS</p></td>
+<td></td>
+<td><p>Mass fraction of passive scalar quantity in cell (<code class="docutils literal notranslate"><span class="pre">PASSIVE_SCALARS</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p>SubfindDensity</p></td>
+<td><p>SFDE</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitLength}^{-3}\)</span> <span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(a^{-3} \, h^2\)</span></p></td>
+<td><p>density around particle (SPH like estimate) (<code class="docutils literal notranslate"><span class="pre">SAVE_HSML_IN_SNAPSHOT</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>SubfindDMDensity</p></td>
+<td><p>SFDD</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitLength}^{-3}\)</span> <span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(a^{-3} \, h^2\)</span></p></td>
+<td><p>dark matter density around particle (SPH like estimate) (<code class="docutils literal notranslate"><span class="pre">SAVE_HSML_IN_SNAPSHOT</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p>SubfindHsml</p></td>
+<td><p>SFHS</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(a \, h^{-1}\)</span></p></td>
+<td><p>SPH smoothing length for density estimate (<code class="docutils literal notranslate"><span class="pre">SAVE_HSML_IN_SNAPSHOT</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>SubfindVelDisp</p></td>
+<td><p>SFVD</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span></p></td>
+<td><p>SPH averaged velocity dispersion around particle (<code class="docutils literal notranslate"><span class="pre">SAVE_HSML_IN_SNAPSHOT</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p>GroupNr</p></td>
+<td><p>GROU</p></td>
+<td></td>
+<td><p>Number of nearest group (<code class="docutils literal notranslate"><span class="pre">FOF_FUZZ_SORT_BY_NEAREST_GROUP=1</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>HighResGasMass</p></td>
+<td><p>HRGM</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(h^{-1}\)</span></p></td>
+<td><p>Conserved scalar quantity flaging the high-res region of a cosmological zoom simulation (<code class="docutils literal notranslate"><span class="pre">REFINEMENT_HIGH_RES_GAS</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p>AllowRefinement</p></td>
+<td><p>REF</p></td>
+<td></td>
+<td><p>Is refinement allowed in gas cell. 0 for low-resolution region gas cells in zoom simulations (<code class="docutils literal notranslate"><span class="pre">REFINEMENT_HIGH_RES_GAS</span></code>)</p></td>
+</tr>
+</tbody>
+</table>
+<section id="format-1">
+<h3>Format 1<a class="headerlink" href="#format-1" title="Permalink to this headline">¶</a></h3>
+<p>Format 1 is organized in blocks, each holding information about all particles
+for a specific property. The first block is the header, containing global
+information about the particle set. Within the other blocks, particles are
+ordered according to their particle type.</p>
+<p>For a more detailed description of this file format, see the Gadget-2 user
+guide (<a class="reference external" href="https://wwwmpa.mpa-garching.mpg.de/gadget/users-guide.pdf">https://wwwmpa.mpa-garching.mpg.de/gadget/users-guide.pdf</a>).</p>
+</section>
+<section id="format-2">
+<h3>Format 2<a class="headerlink" href="#format-2" title="Permalink to this headline">¶</a></h3>
+<p>Format 2 is a variant of format 1, but containing an additional 4-character
+string at the beginning of each block (called Block ID in table). This way,
+it is possible to read the snapshot without having detailed information about
+all settings that were active in the code that produced this output.</p>
+</section>
+<section id="format-3-hdf5">
+<h3>Format 3 / HDF5<a class="headerlink" href="#format-3-hdf5" title="Permalink to this headline">¶</a></h3>
+<p>Format 3 is the by now recommended format, based on the hdf5 library.
+The particle data output consists of hdf5 groups called PartTypeX where
+X runs from 0 to NTYPES-1 (NTYPES=6 if not set in Config-file).
+Each of these hdf5 groups has a number of datasets with properties belonging
+to this particular particle type, e.g. <code class="docutils literal notranslate"><span class="pre">Coordinates</span></code> for the position of
+particles. These are in general 2d arrays, where the first dimension represents
+the different particles, while the second dimension is the dimensionality of
+the specific property (e.g. for <code class="docutils literal notranslate"><span class="pre">Coordinates</span></code>, every particle has 3 entries,
+its x, y and z coordinate). Consequently, for scalar quantities, the array is
+just one dimensional.</p>
+<p>In addition to the particle types, each file has an hdf5 group called <code class="docutils literal notranslate"><span class="pre">Header</span></code>,
+with general information about the simulation and this file in particular.
+These informations are stored in hdf5 attributes within the header group.</p>
+<p>To facilitate the use of the snapshot, the compile time settings are also
+stored in the snapshots, saved as attributes in the group <code class="docutils literal notranslate"><span class="pre">Config</span></code>, as well as
+the parameter settings in the group <code class="docutils literal notranslate"><span class="pre">Parameters</span></code>.
+To be sure it is however advisable to check the <code class="docutils literal notranslate"><span class="pre">./build/arepoconfig.h</span></code> and the
+<code class="docutils literal notranslate"><span class="pre">./output/parameters-usedvalues</span></code> files for the compile time and run-time
+variables of a given simulation.</p>
+</section>
+</section>
+<section id="fof-subfind">
+<h2>FOF/Subfind<a class="headerlink" href="#fof-subfind" title="Permalink to this headline">¶</a></h2>
+<p>The halo and subhalo finder produces a separate output file, summarizing the
+properties determined by the on the fly analysis. These run immediately
+before every simulation output, and also sort the particles in the particle
+data output according to group membership, subhalo membership and binding
+energy.</p>
+<p>The (sub)halo output files have two hdf5 groups containing halo data, called
+<code class="docutils literal notranslate"><span class="pre">Group</span></code>, for the properties of groups (identified by the Friend-of-Friends
+algorithm), and <code class="docutils literal notranslate"><span class="pre">Subhalo</span></code>, for substructures in groups.</p>
+<table class="docutils align-default" id="id2">
+<caption><span class="caption-text"><strong>Halo fields in group catalogue files</strong></span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 5%" />
+<col style="width: 39%" />
+<col style="width: 46%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Group field name</p></th>
+<th class="head"><p>Block ID</p></th>
+<th class="head"><p>Units</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GroupLen</p></td>
+<td><p>FLEN</p></td>
+<td></td>
+<td><p>Number of particles/cells in group</p></td>
+</tr>
+<tr class="row-odd"><td><p>GroupMass</p></td>
+<td><p>FMAS</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(h^{-1}\)</span></p></td>
+<td><p>Sum of masses of all particles in group</p></td>
+</tr>
+<tr class="row-even"><td><p>GroupPos</p></td>
+<td><p>FPOS</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(a \, h^{-1}\)</span></p></td>
+<td><p>Position of the most bound particle in group</p></td>
+</tr>
+<tr class="row-odd"><td><p>GroupCM</p></td>
+<td><p>FGCM</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(a \, h^{-1}\)</span></p></td>
+<td><p>Position of center of mass of group</p></td>
+</tr>
+<tr class="row-even"><td><p>GroupVel</p></td>
+<td><p>FVEL</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(a^{-1}\)</span></p></td>
+<td><p>Velocity of the group, computed as the sum of the mass weighted velocities of all particles/cells in this group, of all types.</p></td>
+</tr>
+<tr class="row-odd"><td><p>GroupLenType</p></td>
+<td><p>FLTY</p></td>
+<td></td>
+<td><p>Number of particles of given type in group</p></td>
+</tr>
+<tr class="row-even"><td><p>GroupMassType</p></td>
+<td><p>FMTY</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(h^{-1}\)</span></p></td>
+<td><p>Sum of particle masses of given type</p></td>
+</tr>
+<tr class="row-odd"><td><p>GroupSFR</p></td>
+<td><p>FSFR</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{Msun}\)</span> <span class="math notranslate nohighlight">\(\text{yr}^{-1}\)</span></p></td>
+<td><p>Cumulative star formation rate of all gas cells in group</p></td>
+</tr>
+<tr class="row-even"><td><p>Group_M_Mean200</p></td>
+<td><p>FMM2</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(h^{-1}\)</span></p></td>
+<td><p>Total mass within a sphere with mean density of 200 times the mean density of the Universe.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Group_R_Mean200</p></td>
+<td><p>FRM2</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(a \, h^{-1}\)</span></p></td>
+<td><p>Radius of sphere corresponding to <code class="docutils literal notranslate"><span class="pre">Group_M_Mean200</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Group_M_Crit200</p></td>
+<td><p>FMC2</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(h^{-1}\)</span></p></td>
+<td><p>Total mass within a sphere around <code class="docutils literal notranslate"><span class="pre">GroupPos</span></code> with mean density of 200 times the critical density of the Universe.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Group_R_Crit200</p></td>
+<td><p>FRC2</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(a \, h^{-1}\)</span></p></td>
+<td><p>Radius of sphere corresponding to <code class="docutils literal notranslate"><span class="pre">Group_M_Crit200</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Group_M_Crit500</p></td>
+<td><p>FMC5</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(h^{-1}\)</span></p></td>
+<td><p>Total mass within a sphere around <code class="docutils literal notranslate"><span class="pre">GroupPos</span></code> with mean density of 500 times the critical density of the Universe.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Group_R_Crit500</p></td>
+<td><p>FRC5</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(a \, h^{-1}\)</span></p></td>
+<td><p>Radius of sphere corresponding to <code class="docutils literal notranslate"><span class="pre">Group_M_Crit500</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Group_M_TopHat200</p></td>
+<td><p>FMT2</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(h^{-1}\)</span></p></td>
+<td><p>Total mass within a sphere around <code class="docutils literal notranslate"><span class="pre">GroupPos</span></code> with mean density having a specific fraction of the mean density of the Universe.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Group_R_TopHat200</p></td>
+<td><p>FRT2</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(a \, h^{-1}\)</span></p></td>
+<td><p>Radius of sphere corresponding to <code class="docutils literal notranslate"><span class="pre">Group_M_TopHat200</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>GroupNsubs</p></td>
+<td><p>FNSH</p></td>
+<td></td>
+<td><p>Number of subhalos identified in this group</p></td>
+</tr>
+<tr class="row-odd"><td><p>GroupFirstSub</p></td>
+<td><p>FFSH</p></td>
+<td></td>
+<td><p>(Global) index of first subhalo in this group. -1 if there are none.</p></td>
+</tr>
+<tr class="row-even"><td><p>GroupFuzzOffsetType</p></td>
+<td><p>FUOF</p></td>
+<td></td>
+<td><p>Particle offset (for each type) of fuzzy particles.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<table class="docutils align-default" id="id3">
+<caption><span class="caption-text"><strong>Subhalo fields in group catalogue files</strong></span><a class="headerlink" href="#id3" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 5%" />
+<col style="width: 39%" />
+<col style="width: 46%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Subhalo field name</p></th>
+<th class="head"><p>Block-ID</p></th>
+<th class="head"><p>Units</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SubhaloLen</p></td>
+<td><p>SLEN</p></td>
+<td></td>
+<td><p>Total number of particles/cells in this subhalo</p></td>
+</tr>
+<tr class="row-odd"><td><p>SubhaloMass</p></td>
+<td><p>SMAS</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(h^{-1}\)</span></p></td>
+<td><p>Total mass of all particles in this subhalo, child subhalos not included</p></td>
+</tr>
+<tr class="row-even"><td><p>SubhaloPos</p></td>
+<td><p>SPOS</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(a \, h^{-1}\)</span></p></td>
+<td><p>Position of most bound particle in subhalo</p></td>
+</tr>
+<tr class="row-odd"><td><p>SubhaloVel</p></td>
+<td><p>SVEL</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span></p></td>
+<td><p>Physical velocity of subhalo</p></td>
+</tr>
+<tr class="row-even"><td><p>SubhaloLenType</p></td>
+<td><p>SLTY</p></td>
+<td></td>
+<td><p>Number of particle of each type in a subhalo</p></td>
+</tr>
+<tr class="row-odd"><td><p>SubhaloMassType</p></td>
+<td><p>SMTY</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(h^{-1}\)</span></p></td>
+<td><p>Mass of each particle type in a subhalo</p></td>
+</tr>
+<tr class="row-even"><td><p>SubhaloCM</p></td>
+<td><p>SCMP</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(a \, h^{-1}\)</span></p></td>
+<td><p>Center of mass of subhalo</p></td>
+</tr>
+<tr class="row-odd"><td><p>SubhaloSpin</p></td>
+<td><p>SSPI</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(h^{-1}\)</span></p></td>
+<td><p>Total spin in each coordinate axis from all subhalo particles/cells</p></td>
+</tr>
+<tr class="row-even"><td><p>SubhaloVelDisp</p></td>
+<td><p>SVDI</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span></p></td>
+<td><p>1d velocity dispersion</p></td>
+</tr>
+<tr class="row-odd"><td><p>SubhaloVmax</p></td>
+<td><p>SVMX</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span></p></td>
+<td><p>Maximum circular velocity</p></td>
+</tr>
+<tr class="row-even"><td><p>SubhaloVmaxRad</p></td>
+<td><p>SVRX</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(a\)</span> <span class="math notranslate nohighlight">\(h^{-1}\)</span></p></td>
+<td><p>Radius of maximum circular velocity</p></td>
+</tr>
+<tr class="row-odd"><td><p>SubhaloHalfmassRad</p></td>
+<td><p>SHMR</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(a\)</span> <span class="math notranslate nohighlight">\(h^{-1}\)</span></p></td>
+<td><p>Radius containing half the mass of the subhalo</p></td>
+</tr>
+<tr class="row-even"><td><p>SubhaloHalfmassRadType</p></td>
+<td><p>SHMT</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(a\)</span> <span class="math notranslate nohighlight">\(h^{-1}\)</span></p></td>
+<td><p>Radius containing half the mass of a given type of particles in the subhalo</p></td>
+</tr>
+<tr class="row-odd"><td><p>SubhaloMassInRad</p></td>
+<td><p>SMIR</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(h^{-1}\)</span></p></td>
+<td><p>Sum of all particle masses enclosed in a sphere with twice the part4 (i.e. stellar) half mass radius</p></td>
+</tr>
+<tr class="row-even"><td><p>SubhaloMassInHalfRad</p></td>
+<td><p>SMIH</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(h^{-1}\)</span></p></td>
+<td><p>Sum of all particle masses enclosed in a sphere with the part4 (i.e. stellar) half mass radius</p></td>
+</tr>
+<tr class="row-odd"><td><p>SubhaloMassInMaxRad</p></td>
+<td><p>SMIM</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(h^{-1}\)</span></p></td>
+<td><p>Sum of all particle masses enclosed in a sphere with radius <code class="docutils literal notranslate"><span class="pre">SubhaloVmaxRad</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>SubhaloMassInRadType</p></td>
+<td><p>SMIT</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(h^{-1}\)</span></p></td>
+<td><p>Sum of particle masses of specific type particles enclosed in a sphere with twice the part4 (i.e. stellar) half mass radius</p></td>
+</tr>
+<tr class="row-odd"><td><p>SubhaloMassInHalfRadType</p></td>
+<td><p>SMHT</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(h^{-1}\)</span></p></td>
+<td><p>Sum of particle masses of specific type particles enclosed in a sphere with the part4 (i.e. stellar) half mass radius</p></td>
+</tr>
+<tr class="row-even"><td><p>SubhaloMassInMaxRadType</p></td>
+<td><p>SMMT</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(h^{-1}\)</span></p></td>
+<td><p>Sum of particle masses of specific type particles enclosed in a sphere with radius <code class="docutils literal notranslate"><span class="pre">SubhaloVmaxRad</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>SubhaloIDMostbound</p></td>
+<td><p>SIDM</p></td>
+<td></td>
+<td><p>The ID of the most bound particle</p></td>
+</tr>
+<tr class="row-even"><td><p>SubhaloGrNr</p></td>
+<td><p>SGNR</p></td>
+<td></td>
+<td><p>Global index of the (FoF) group this subhalo belongs to</p></td>
+</tr>
+<tr class="row-odd"><td><p>SubhaloParent</p></td>
+<td><p>SPRT</p></td>
+<td></td>
+<td><p>Index of a potential parent subhalo this subhalo is part of</p></td>
+</tr>
+<tr class="row-even"><td><p>SubhaloBfldHalo</p></td>
+<td><p>BFDH</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}^{0.5}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}^{-1.5}\)</span> <span class="math notranslate nohighlight">\(h \, a^{-2}\)</span></p></td>
+<td><p>Volume averaged magnetic field strength in subhalo (Gauss unit system, not Heaviside-Lorentz)</p></td>
+</tr>
+<tr class="row-odd"><td><p>SubhaloBfldDisk</p></td>
+<td><p>BFDD</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}^{0.5}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}^{-1.5}\)</span> <span class="math notranslate nohighlight">\(h \, a^{-2}\)</span></p></td>
+<td><p>Volume averaged magnetic field strength within twice the stellar half mass radius (Gauss unit system, not Heaviside-Lorentz)</p></td>
+</tr>
+<tr class="row-even"><td><p>SubhaloSFR</p></td>
+<td><p>SSFR</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{Msun} \, \text{yr}^{-1}\)</span></p></td>
+<td><p>Sum of star formation rates of all gas cells in the subhalo</p></td>
+</tr>
+<tr class="row-odd"><td><p>SubhaloSFRinRad</p></td>
+<td><p>SSFI</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{Msun} \, \text{yr}^{-1}\)</span></p></td>
+<td><p>Sum of star formation rates of all gas cells within twice the stellar half mass radius</p></td>
+</tr>
+<tr class="row-even"><td><p>SubhaloSFRinHalfRad</p></td>
+<td><p>SSFH</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{Msun} \, \text{yr}^{-1}\)</span></p></td>
+<td><p>Sum of star formation rates of all gas cells within the stellar half mass radius</p></td>
+</tr>
+<tr class="row-odd"><td><p>SubhaloSFRinMaxRad</p></td>
+<td><p>SSFM</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{Msun} \, \text{yr}^{-1}\)</span></p></td>
+<td><p>Sum of star formation rates of all gas cells within a sphere with radius <code class="docutils literal notranslate"><span class="pre">SubhaloVmaxRad</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>ID</p></td>
+<td><p>PIDS</p></td>
+<td></td>
+<td><p>Particle IDs in subhalo</p></td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<table class="docutils align-default" id="id4">
+<caption><span class="caption-text"><strong>Additional group fields that are calculated when</strong> <code class="docutils literal notranslate"><span class="pre">SUBFIND_EXTENDED_PROPERTIES</span></code> <strong>is set</strong></span><a class="headerlink" href="#id4" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 5%" />
+<col style="width: 39%" />
+<col style="width: 46%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Group field name</p></th>
+<th class="head"><p>Block ID</p></th>
+<th class="head"><p>Units</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Group_J_Mean200</p></td>
+<td><p>FJM2</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(h^{-2}\)</span></p></td>
+<td><p>Total angular momentum of all particles in group within <code class="docutils literal notranslate"><span class="pre">Group_R_Mean200</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Group_Jdm_Mean200</p></td>
+<td><p>JDM2</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(h^{-2}\)</span></p></td>
+<td><p>Total angular momentum of dark matter particles in group within <code class="docutils literal notranslate"><span class="pre">Group_R_Mean200</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Group_Jgas_Mean200</p></td>
+<td><p>JGM2</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(h^{-2}\)</span></p></td>
+<td><p>Total angular momentum of gas particles in group within <code class="docutils literal notranslate"><span class="pre">Group_R_Mean200</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Group_Jstars_Mean200</p></td>
+<td><p>JSM2</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(h^{-2}\)</span></p></td>
+<td><p>Total angular momentum of star matter particles in group within <code class="docutils literal notranslate"><span class="pre">Group_R_Mean200</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Group_MassType_Mean200</p></td>
+<td><p>MTM2</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(h^{-1}\)</span></p></td>
+<td><p>Total mass of group for each particle type within <code class="docutils literal notranslate"><span class="pre">Group_R_Mean200</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Group_LenType_Mean200</p></td>
+<td><p>LTM2</p></td>
+<td></td>
+<td><p>Total number of particles for each particle type within <code class="docutils literal notranslate"><span class="pre">Group_R_Mean200</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Group_CMFrac_Mean200</p></td>
+<td><p>CFM2</p></td>
+<td></td>
+<td><p>Mass fraction of counter-rotating particles within <code class="docutils literal notranslate"><span class="pre">Group_R_Mean200</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Group_CMFracType_Mean200</p></td>
+<td><p>FTM2</p></td>
+<td></td>
+<td><p>Mass fraction of counter-rotating particles within <code class="docutils literal notranslate"><span class="pre">Group_R_Mean200</span></code> for each type</p></td>
+</tr>
+<tr class="row-even"><td><p>Group_J_Crit200</p></td>
+<td><p>FJC2</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(h^{-2}\)</span></p></td>
+<td><p>Total angular momentum of all particles in group within <code class="docutils literal notranslate"><span class="pre">Group_R_Crit200</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Group_Jdm_Crit200</p></td>
+<td><p>JDC2</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(h^{-2}\)</span></p></td>
+<td><p>Total angular momentum of dark matter particles in group within <code class="docutils literal notranslate"><span class="pre">Group_R_Crit200</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Group_Jgas_Crit200</p></td>
+<td><p>JGC2</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(h^{-2}\)</span></p></td>
+<td><p>Total angular momentum of gas particles in group within <code class="docutils literal notranslate"><span class="pre">Group_R_Crit200</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Group_Jstars_Crit200</p></td>
+<td><p>JSC2</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(h^{-2}\)</span></p></td>
+<td><p>Total angular momentum of star particles in group within <code class="docutils literal notranslate"><span class="pre">Group_R_Crit200</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Group_MassType_Crit200</p></td>
+<td><p>MTC2</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(h^{-1}\)</span></p></td>
+<td><p>Total mass of group for each particle type within <code class="docutils literal notranslate"><span class="pre">Group_R_Crit200</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Group_LenType_Crit200</p></td>
+<td><p>LTC2</p></td>
+<td></td>
+<td><p>Total number of particles for each particle type within <code class="docutils literal notranslate"><span class="pre">Group_R_Crit200</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Group_CMFrac_Crit200</p></td>
+<td><p>CFC2</p></td>
+<td></td>
+<td><p>Mass fraction of counter-rotating particles within <code class="docutils literal notranslate"><span class="pre">Group_R_Crit200</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Group_CMFracType_Crit200</p></td>
+<td><p>FTC2</p></td>
+<td></td>
+<td><p>Mass fraction of counter-rotating particles within <code class="docutils literal notranslate"><span class="pre">Group_R_Crit200</span></code> for each type</p></td>
+</tr>
+<tr class="row-even"><td><p>Group_J_Crit500</p></td>
+<td><p>FJC5</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(h^{-2}\)</span></p></td>
+<td><p>Total angular momentum of all particles in group within <code class="docutils literal notranslate"><span class="pre">Group_R_Crit500</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Group_Jdm_Crit500</p></td>
+<td><p>JDC5</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(h^{-2}\)</span></p></td>
+<td><p>Total angular momentum of dark matter particles in group within <code class="docutils literal notranslate"><span class="pre">Group_R_Crit500</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Group_Jgas_Crit500</p></td>
+<td><p>JGC5</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(h^{-2}\)</span></p></td>
+<td><p>Total angular momentum of gas particles in group within <code class="docutils literal notranslate"><span class="pre">Group_R_Crit500</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Group_Jstars_Crit500</p></td>
+<td><p>JSC5</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(h^{-2}\)</span></p></td>
+<td><p>Total angular momentum of star particles in group within <code class="docutils literal notranslate"><span class="pre">Group_R_Crit500</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Group_MassType_Crit500</p></td>
+<td><p>MTC5</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(h^{-1}\)</span></p></td>
+<td><p>Total mass of group for each particle type within <code class="docutils literal notranslate"><span class="pre">Group_R_Crit500</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Group_LenType_Crit500</p></td>
+<td><p>LTC5</p></td>
+<td></td>
+<td><p>Total number of particles for each particle type within <code class="docutils literal notranslate"><span class="pre">Group_R_Crit500</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Group_CMFrac_Crit500</p></td>
+<td><p>CFC5</p></td>
+<td></td>
+<td><p>Mass fraction of counter-rotating particles within <code class="docutils literal notranslate"><span class="pre">Group_R_Crit500</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Group_CMFracType_Crit500</p></td>
+<td><p>FTC5</p></td>
+<td></td>
+<td><p>Mass fraction of counter-rotating particles within <code class="docutils literal notranslate"><span class="pre">Group_R_Crit500</span></code> for each type</p></td>
+</tr>
+<tr class="row-even"><td><p>Group_J_TopHat200</p></td>
+<td><p>FJT2</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(h^{-2}\)</span></p></td>
+<td><p>Total angular momentum of all particles in group within <code class="docutils literal notranslate"><span class="pre">Group_R_TopHat200</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Group_Jdm_TopHat200</p></td>
+<td><p>JDT2</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(h^{-2}\)</span></p></td>
+<td><p>Total angular momentum of dark matter particles in group within <code class="docutils literal notranslate"><span class="pre">Group_R_TopHat200</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Group_Jgas_TopHat200</p></td>
+<td><p>JGT2</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(h^{-2}\)</span></p></td>
+<td><p>Total angular momentum of gas particles in group within <code class="docutils literal notranslate"><span class="pre">Group_R_TopHat200</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Group_Jstars_TopHat200</p></td>
+<td><p>JST2</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(h^{-2}\)</span></p></td>
+<td><p>Total angular momentum of star particles in group within <code class="docutils literal notranslate"><span class="pre">Group_R_TopHat200</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Group_MassType_TopHat200</p></td>
+<td><p>MTT2</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(h^{-1}\)</span></p></td>
+<td><p>Total mass of group for each particle type within <code class="docutils literal notranslate"><span class="pre">Group_R_TopHat200</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Group_LenType_TopHat200</p></td>
+<td><p>LTT2</p></td>
+<td></td>
+<td><p>Total number of particles for each particle type within <code class="docutils literal notranslate"><span class="pre">Group_R_TopHat200</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Group_CMFrac_TopHat200</p></td>
+<td><p>CFT2</p></td>
+<td></td>
+<td><p>Mass fraction of counter-rotating particles within <code class="docutils literal notranslate"><span class="pre">Group_R_TopHat200</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Group_CMFracType_TopHat200</p></td>
+<td><p>FTT2</p></td>
+<td></td>
+<td><p>Mass fraction of counter-rotating particles within <code class="docutils literal notranslate"><span class="pre">Group_R_TopHat200</span></code> for each type</p></td>
+</tr>
+<tr class="row-even"><td><p>Group_Epot_Crit200</p></td>
+<td><p>EPO1</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(a^{-2} \, h^{-1}\)</span></p></td>
+<td><p>Total potential energy of particles within <code class="docutils literal notranslate"><span class="pre">Group_R_Crit200</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Group_Ekin_Crit200</p></td>
+<td><p>EKI1</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(a^{-2} \, h^{-1}\)</span></p></td>
+<td><p>Total kinetic energy of particles within <code class="docutils literal notranslate"><span class="pre">Group_R_Crit200</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Group_Ethr_Crit200</p></td>
+<td><p>ETH1</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(a^{-2} \, h^{-1}\)</span></p></td>
+<td><p>Total thermal energy of particles within <code class="docutils literal notranslate"><span class="pre">Group_R_Crit200</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Group_Epot_Mean200</p></td>
+<td><p>EPO2</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(a^{-2} \, h^{-1}\)</span></p></td>
+<td><p>Total potential energy of particles within <code class="docutils literal notranslate"><span class="pre">Group_R_Mean200</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Group_Ekin_Mean200</p></td>
+<td><p>EKI2</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(a^{-2} \, h^{-1}\)</span></p></td>
+<td><p>Total kinetic energy of particles within <code class="docutils literal notranslate"><span class="pre">Group_R_Mean200</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Group_Ethr_Mean200</p></td>
+<td><p>ETH2</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(a^{-2} \, h^{-1}\)</span></p></td>
+<td><p>Total thermal energy of particles within <code class="docutils literal notranslate"><span class="pre">Group_R_Mean200</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Group_Epot_TopHat200</p></td>
+<td><p>EPO3</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(a^{-2} \, h^{-1}\)</span></p></td>
+<td><p>Total potential energy of particles within <code class="docutils literal notranslate"><span class="pre">Group_R_TopHat200</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Group_Ekin_TopHat200</p></td>
+<td><p>EKI3</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(a^{-2} \, h^{-1}\)</span></p></td>
+<td><p>Total kinetic energy of particles within <code class="docutils literal notranslate"><span class="pre">Group_R_TopHat200</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Group_Ethr_TopHat200</p></td>
+<td><p>ETH3</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(a^{-2} \, h^{-1}\)</span></p></td>
+<td><p>Total thermal energy of particles within <code class="docutils literal notranslate"><span class="pre">Group_R_TopHat200</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Group_Epot_Crit500</p></td>
+<td><p>EPO4</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(a^{-2} \, h^{-1}\)</span></p></td>
+<td><p>Total potential energy of particles within <code class="docutils literal notranslate"><span class="pre">Group_R_Crit500</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Group_Ekin_Crit500</p></td>
+<td><p>EKI4</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(a^{-2} \, h^{-1}\)</span></p></td>
+<td><p>Total kinetic energy of particles within <code class="docutils literal notranslate"><span class="pre">Group_R_Crit500</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Group_Ethr_Crit500</p></td>
+<td><p>ETH4</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(a^{-2} \, h^{-1}\)</span></p></td>
+<td><p>Total thermal energy of particles within <code class="docutils literal notranslate"><span class="pre">Group_R_Crit500</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Group_J</p></td>
+<td><p>FOFJ</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity} \, h^{-2}\)</span></p></td>
+<td><p>Total angular momentum of all particles in fof-group</p></td>
+</tr>
+<tr class="row-odd"><td><p>Group_Jdm</p></td>
+<td><p>FOJD</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity} \, h^{-2}\)</span></p></td>
+<td><p>Total angular momentum of all dark matter particles in fof-group</p></td>
+</tr>
+<tr class="row-even"><td><p>Group_Jgas</p></td>
+<td><p>FOJG</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity} h^{-2}\)</span></p></td>
+<td><p>Total angular momentum of all gas cells in fof-group</p></td>
+</tr>
+<tr class="row-odd"><td><p>Group_Jstars</p></td>
+<td><p>FOJS</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity} \, h^{-2}\)</span></p></td>
+<td><p>Total angular momentum of all stars in fof-group</p></td>
+</tr>
+<tr class="row-even"><td><p>Group_CMFrac</p></td>
+<td><p>FOCF</p></td>
+<td></td>
+<td><p>Mass fraction of counter-rotating particles in fof-group</p></td>
+</tr>
+<tr class="row-odd"><td><p>Group_CMFracType</p></td>
+<td><p>FOFT</p></td>
+<td></td>
+<td><p>Mass fraction of counter-rotating particles in fof-group for each type</p></td>
+</tr>
+<tr class="row-even"><td><p>GroupEkin</p></td>
+<td><p>EKIN</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(a^{-2} \, h^{-1}\)</span></p></td>
+<td><p>Total kinetic energy of all particles in fof-group</p></td>
+</tr>
+<tr class="row-odd"><td><p>GroupEthr</p></td>
+<td><p>ETHR</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(a^{-2} \, h^{-1}\)</span></p></td>
+<td><p>Total thermal energy of all particles in fof-group</p></td>
+</tr>
+<tr class="row-even"><td><p>GroupEpot</p></td>
+<td><p>EPOT</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(a^{-2} \, h^{-1}\)</span></p></td>
+<td><p>Total potential energy of all particles in fof-group</p></td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<table class="docutils align-default" id="id5">
+<caption><span class="caption-text"><strong>Additional subhalo fields that are calculated when</strong> <code class="docutils literal notranslate"><span class="pre">SUBFIND_EXTENDED_PROPERTIES</span></code> <strong>is set</strong></span><a class="headerlink" href="#id5" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 5%" />
+<col style="width: 39%" />
+<col style="width: 46%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Subhalo field name</p></th>
+<th class="head"><p>Block ID</p></th>
+<th class="head"><p>Units</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SubhaloEkin</p></td>
+<td><p>SEKN</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(a^{-2} \, h^{-1}\)</span></p></td>
+<td><p>Total kinetic energy of all particles in subhalo</p></td>
+</tr>
+<tr class="row-odd"><td><p>SubhaloEthr</p></td>
+<td><p>SETH</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(a^{-2} \, h^{-1}\)</span></p></td>
+<td><p>Total thermal energy of all particles in subhalo</p></td>
+</tr>
+<tr class="row-even"><td><p>SubhaloEpot</p></td>
+<td><p>SEPT</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(a^{-2} \, h^{-1}\)</span></p></td>
+<td><p>Total potential energy of all particles in subhalo</p></td>
+</tr>
+<tr class="row-odd"><td><p>Subhalo_J</p></td>
+<td><p>SUBJ</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(h^{-2}\)</span></p></td>
+<td><p>Total angular momentum of all particles in subhalo</p></td>
+</tr>
+<tr class="row-even"><td><p>Subhalo_Jdm</p></td>
+<td><p>SJDM</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(h^{-2}\)</span></p></td>
+<td><p>Total angular momentum of dark matter particles in subhalo</p></td>
+</tr>
+<tr class="row-odd"><td><p>Subhalo_Jgas</p></td>
+<td><p>SJGS</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(h^{-2}\)</span></p></td>
+<td><p>Total angular momentum of gas cells in subhalo</p></td>
+</tr>
+<tr class="row-even"><td><p>Subhalo_Jstars</p></td>
+<td><p>SJST</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(h^{-2}\)</span></p></td>
+<td><p>Total angular momentum of star particles in subhalo</p></td>
+</tr>
+<tr class="row-odd"><td><p>Subhalo_JInHalfRad</p></td>
+<td><p>SJHR</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(h^{-2}\)</span></p></td>
+<td><p>Total angular momentum of all particles in stellar half mass radius</p></td>
+</tr>
+<tr class="row-even"><td><p>Subhalo_JdmInHalfRad</p></td>
+<td><p>SJDH</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(h^{-2}\)</span></p></td>
+<td><p>Total angular momentum of dark matter particles within stellar half mass radius</p></td>
+</tr>
+<tr class="row-odd"><td><p>Subhalo_JgasInHalfRad</p></td>
+<td><p>SJGH</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(h^{-2}\)</span></p></td>
+<td><p>Total angular momentum of gas cells within stellar half mass radius</p></td>
+</tr>
+<tr class="row-even"><td><p>Subhalo_JstarsInHalfRad</p></td>
+<td><p>SJSH</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(h^{-2}\)</span></p></td>
+<td><p>Total angular momentum of star particles within stellar half mass radius</p></td>
+</tr>
+<tr class="row-odd"><td><p>Subhalo_JInRad</p></td>
+<td><p>SJMR</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(h^{-2}\)</span></p></td>
+<td><p>Total angular momentum of all particles in sphere with radius twice the stellar half mass radius</p></td>
+</tr>
+<tr class="row-even"><td><p>Subhalo_JdmInRad</p></td>
+<td><p>SJDR</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(h^{-2}\)</span></p></td>
+<td><p>Total angular momentum of dark matter particles within twice the stellar half mass radius</p></td>
+</tr>
+<tr class="row-odd"><td><p>Subhalo_JgasInRad</p></td>
+<td><p>SJGR</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(h^{-2}\)</span></p></td>
+<td><p>Total angular momentum of gas cells within twice the stellar half mass radius</p></td>
+</tr>
+<tr class="row-even"><td><p>Subhalo_JstarsInRad</p></td>
+<td><p>SJSR</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{UnitMass}\)</span> <span class="math notranslate nohighlight">\(\text{UnitLength}\)</span> <span class="math notranslate nohighlight">\(\text{UnitVelocity}\)</span> <span class="math notranslate nohighlight">\(h^{-2}\)</span></p></td>
+<td><p>Total angular momentum of star particles within twice the stellar half mass radius</p></td>
+</tr>
+<tr class="row-odd"><td><p>Subhalo_CMFrac</p></td>
+<td><p>SCMF</p></td>
+<td></td>
+<td><p>Mass fraction of counter-rotating particles in subhalo</p></td>
+</tr>
+<tr class="row-even"><td><p>Subhalo_CMFracType</p></td>
+<td><p>SCMT</p></td>
+<td></td>
+<td><p>Mass fraction of counter-rotating particles in subhalo for each type</p></td>
+</tr>
+<tr class="row-odd"><td><p>Subhalo_CMFracInHalfRad</p></td>
+<td><p>SCMH</p></td>
+<td></td>
+<td><p>Mass fraction of counter-rotating particles within stellar half mass radius</p></td>
+</tr>
+<tr class="row-even"><td><p>Subhalo_CMFracTypeInHalfRad</p></td>
+<td><p>SCTH</p></td>
+<td></td>
+<td><p>Mass fraction of counter-rotating particles within stellar half mass radius for each type</p></td>
+</tr>
+<tr class="row-odd"><td><p>Subhalo_CMFracInRad</p></td>
+<td><p>SCMR</p></td>
+<td></td>
+<td><p>Mass fraction of counter-rotating particles in a sphere with twice the stellar half mass radius</p></td>
+</tr>
+<tr class="row-even"><td><p>Subhalo_CMFracTypeInRad</p></td>
+<td><p>SCTR</p></td>
+<td></td>
+<td><p>Mass fraction of counter-rotating particles in a sphere with twice the stellar half mass radius for each type</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Arepo</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="running.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simtypes.html">Simulation examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config-options.html">Code Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameterfile.html">Parameterfile</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Simulation output</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#particle-data">Particle data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#format-1">Format 1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#format-2">Format 2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#format-3-hdf5">Format 3 / HDF5</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#fof-subfind">FOF/Subfind</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="diagnosticfiles.html">Diagnostic output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="migration.html">Related codes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Code development</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="parameterfile.html" title="previous chapter">Parameterfile</a></li>
+      <li>Next: <a href="diagnosticfiles.html" title="next chapter">Diagnostic output</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Max-Planck Institute for Astrophysics.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/snapshotformat.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,393 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Simulation examples &#8212; Arepo 1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Code Configuration" href="config-options.html" />
+    <link rel="prev" title="Getting started" href="running.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="simulation-examples">
+<h1>Simulation examples<a class="headerlink" href="#simulation-examples" title="Permalink to this headline">¶</a></h1>
+<p>Arepo is a multi-purpose code that supports a number of different
+types of simulations. Here, we present some examples that in our
+opinion are particularly relevant. This list is by no means complete,
+and highly biased to the fields of interest of the authors.  We
+encourage users that have other simulation setups to make them (or
+small test examples) available to us, in order to provide a more
+exhaustive list of examples in future code versions.</p>
+<section id="general-execution-structure-of-examples">
+<h2>General Execution Structure of Examples<a class="headerlink" href="#general-execution-structure-of-examples" title="Permalink to this headline">¶</a></h2>
+<p>Examples can be run using the <code class="docutils literal notranslate"><span class="pre">test.sh</span></code> shell script (typing <code class="docutils literal notranslate"><span class="pre">bash</span>
+<span class="pre">test.sh</span></code>).  The script itself, as the name suggests, is there to run
+a couple of verification simulations and report whether the simulation
+results agree with specifications. In particular, if this is the case,
+the script will delete the directory in which the example run in,
+which might not be desired when getting started with the code.</p>
+<p>The general procedure to execute an example is (replace <cite>myexample</cite> by
+the desired one):</p>
+<blockquote>
+<div><ul>
+<li><p>create a run-directory, in which the simulation will be executed:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">./</span><span class="n">run</span><span class="o">/</span><span class="n">examples</span><span class="o">/</span><span class="n">myexample</span>
+</pre></div>
+</div>
+</li>
+<li><p>copy the entire content of the example directory of interest to the
+run directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cp</span> <span class="o">-</span><span class="n">r</span> <span class="o">./</span><span class="n">examples</span><span class="o">/</span><span class="n">myexample</span><span class="o">/*</span> <span class="o">./</span><span class="n">run</span><span class="o">/</span><span class="n">examples</span><span class="o">/</span><span class="n">myexample</span><span class="o">/</span>
+</pre></div>
+</div>
+</li>
+<li><p>execute the <code class="docutils literal notranslate"><span class="pre">create.py</span></code> file, with the run directory as first
+argument:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">./</span><span class="n">run</span><span class="o">/</span><span class="n">examples</span><span class="o">/</span><span class="n">myexample</span><span class="o">/</span><span class="n">create</span><span class="o">.</span><span class="n">py</span> \
+<span class="o">./</span><span class="n">run</span><span class="o">/</span><span class="n">examples</span><span class="o">/</span><span class="n">myexample</span><span class="o">/</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<blockquote>
+<div><p>This creates initial conditions and possible other files required by
+the simulation.</p>
+</div></blockquote>
+<ul>
+<li><p>compile AREPO, using the provided Config.sh file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">CONFIG</span><span class="o">=./</span><span class="n">run</span><span class="o">/</span><span class="n">examples</span><span class="o">/</span><span class="n">myexample</span><span class="o">/</span><span class="n">Config</span><span class="o">.</span><span class="n">sh</span> \
+<span class="n">BUILD_DIR</span><span class="o">=./</span><span class="n">run</span><span class="o">/</span><span class="n">examples</span><span class="o">/</span><span class="n">myexample</span><span class="o">/</span><span class="n">build</span> \
+<span class="n">EXEC</span><span class="o">=./</span><span class="n">run</span><span class="o">/</span><span class="n">examples</span><span class="o">/</span><span class="n">myexample</span><span class="o">/</span><span class="n">Arepo</span>
+</pre></div>
+</div>
+</li>
+<li><p>change to run directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">./</span><span class="n">run</span><span class="o">/</span><span class="n">examples</span><span class="o">/</span><span class="n">myexample</span><span class="o">/</span>
+</pre></div>
+</div>
+</li>
+<li><p>execute Arepo (here on 8 mpi ranks):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mpiexec</span> <span class="o">-</span><span class="n">np</span> <span class="mi">8</span> <span class="o">./</span><span class="n">Arepo</span> <span class="n">param</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+</li>
+<li><p>change back to root directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">../../../</span>
+</pre></div>
+</div>
+</li>
+<li><p>execute the <code class="docutils literal notranslate"><span class="pre">check.py</span></code> script to do analysis on the simulation
+output (again specifying the relative path to the run directory):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">./</span><span class="n">run</span><span class="o">/</span><span class="n">examples</span><span class="o">/</span><span class="n">myexample</span><span class="o">/</span><span class="n">check</span><span class="o">.</span><span class="n">py</span> \
+<span class="o">./</span><span class="n">run</span><span class="o">/</span><span class="n">examples</span><span class="o">/</span><span class="n">myexample</span><span class="o">/</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div></blockquote>
+<p>Note that the only command that is crucial to be executed in a
+specific directory is the execution of Arepo itself, <code class="docutils literal notranslate"><span class="pre">mpiexec</span> <span class="pre">-np</span> <span class="pre">8</span>
+<span class="pre">./Arepo</span> <span class="pre">param.txt</span></code>, because the parameter file contains relative
+paths to the initial conditions, other required files, and the output
+directory. All other commands can be executed from an arbitrary
+directory, as long as the relative path handed over is valid.</p>
+</section>
+<section id="cosmological-simulations">
+<h2>Cosmological Simulations<a class="headerlink" href="#cosmological-simulations" title="Permalink to this headline">¶</a></h2>
+<p>One of the main simulation types in Arepo are simulations on an
+expanding spacetime, where the coordinates are treated as comoving
+coordinates.  This mode is actived whenever the parameter flag
+<code class="docutils literal notranslate"><span class="pre">ComovingIntegrationOn</span></code> is set to “1” in the parameter file. In this
+case, the code models an expanding spacetime described by the
+Friedmann equations.</p>
+<p>The halo (FoF) and subhalo finder (subfind) are analysis tools mainly
+for these types of simulations.</p>
+<section id="cosmological-volumes">
+<h3>Cosmological volumes<a class="headerlink" href="#cosmological-volumes" title="Permalink to this headline">¶</a></h3>
+<p>One of the standard types of cosmological simulations are cosmological
+volume simulations. These simulations have a uniform mass resolution
+and are set up by using cosmological perturbation theory, converted to
+small initial position and velocity perturbations in a periodic box
+with fixed comoving extent. These simulations can be done with gravity
+only, in which case the simulation particles are all of a single type
+(type &gt; 0) and gravity is recommended to be calculated using a TreePM
+algorithm. This means that the compile time flags <code class="docutils literal notranslate"><span class="pre">SELFGRAVITY</span></code> and
+<code class="docutils literal notranslate"><span class="pre">PMGRID</span></code> are set. The example <code class="docutils literal notranslate"><span class="pre">cosmo_box_gravity_only_3d</span></code> is a
+very small representative of such a simulation.</p>
+<p>In these cosmological simulations it is also possible to include gas.
+This can be done, for example, by reading in gravity only initial
+conditions and setting the compile-time option
+<code class="docutils literal notranslate"><span class="pre">GENERATE_GAS_IN_ICS</span></code>, which will split every input particle in a
+gas cell and a dark matter particle, with the mass ratio following the
+cosmic average mass and baryon fractions, <code class="docutils literal notranslate"><span class="pre">Omega0</span></code> and
+<code class="docutils literal notranslate"><span class="pre">OmegaBaryon</span></code>, respectively, which are defined in the parameter
+file.  Including gas in the simulation, it is also useful to use mesh
+regularization options as well as refinement and derefinement. On top
+of this, it is also possible to use prescriptions for radiative
+cooling and star formation using the respective compile-time flags
+<code class="docutils literal notranslate"><span class="pre">COOLING</span></code> and <code class="docutils literal notranslate"><span class="pre">USE_SFR</span></code>. The example
+<code class="docutils literal notranslate"><span class="pre">cosmo_box_star_formation_3d</span></code> is using such a setup.</p>
+</section>
+<section id="cosmological-zoom-simulations">
+<h3>Cosmological zoom simulations<a class="headerlink" href="#cosmological-zoom-simulations" title="Permalink to this headline">¶</a></h3>
+<p>A second class of cosmological simulations that have become popular in
+studies of galaxy and galaxy cluster formation are so-called zoom
+simulations, in which the Lagrangian region belonging to a single
+final object is sampled with significantly higher resolution than the
+rest of the cosmological volume. In this way, it is possible to
+accurately resolve the formation of an individual object, while still
+correctly modeling the large-scale environmental effects. These
+simulations can be run, as above, in gravity only mode or including
+gas physics. A gravity only example is given as
+<code class="docutils literal notranslate"><span class="pre">cosmo_zoom_gravity_only_3d</span></code> in the examples (note however that the
+ICs need to be created separately in this example, as they are
+slightly too large to include them into the main code repository).
+Technically, such a zoom simulation needs slightly different
+configuration in the particle-mesh algorithm. In particular, it is
+often useful to place a second particle-mesh layer which calculates
+forces only in the high-resolution region.  This can be triggered by
+the compile-time flag <code class="docutils literal notranslate"><span class="pre">PLACEHIGHRESREGION</span></code>.  In addition, the flag
+<code class="docutils literal notranslate"><span class="pre">PM_ZOOM_OPTIMIZED</span></code> will change the employed particle-mesh algorithm
+to one that is specifically optimized for this type of simulations.</p>
+</section>
+<section id="initial-conditions-generation">
+<h3>Initial conditions generation<a class="headerlink" href="#initial-conditions-generation" title="Permalink to this headline">¶</a></h3>
+<p>The creation of initial conditions for cosmological simulation is in
+general a complicated procedure, and not included in the Arepo
+code. However, we include in the examples the possibility to download
+and execute third-party initial condition generating software to
+illustrate the general procedure how to create them (MUSIC, Hahn &amp;
+Abel 2011, MNRAS, 415, 2101 and N-GenIC, Springel et al. 2005, Nature,
+435, 629) We note that these third party software packages generally
+have different library requirements than Arepo, and therefore might
+not work immediately on some machines. We also note that the initial
+conditions used in the examples are chosen for illustration purposes
+and to minimize computational effort to run them. They are generally
+not suited to be used directly in scientific work.</p>
+</section>
+</section>
+<section id="newtonian-space">
+<h2>Newtonian space<a class="headerlink" href="#newtonian-space" title="Permalink to this headline">¶</a></h2>
+<p>Apart from comoving integration, Arepo can also handle an ordinary
+Newtonian spacetime by choosing the parameter option
+<code class="docutils literal notranslate"><span class="pre">ComovingIntegrationOn</span> <span class="pre">0</span></code>.  While cosmological simulations usually
+assume periodic boundary conditions, simulations in Newtonian space
+can also have reflective or inflow/outflow boundary conditions.</p>
+<p>The first example of this class of simulations is an isolated,
+self-gravitating object, such as in
+<code class="docutils literal notranslate"><span class="pre">isolated_galaxy_collisionless_3d</span></code>. This particular case only
+contains collisionless particles, namely the dark matter and stellar
+component of a disk galaxy, and their gravitational interactions are
+calculated with a tree algorithm only, assuming non-periodic forces.
+The initial conditions of this problem are created with the GalIC code
+(Yurin &amp; Springel 2014, MNRAS, 444, 62). The initial conditions
+generation can be triggered in the create.py script, however is a
+computationally expensive procedure. Therefore we also provide the
+initial conditions in the repository.</p>
+<p>Another popular type of simulations in galactic astrophysics are
+mergers of galaxies. The example <code class="docutils literal notranslate"><span class="pre">galaxy_merger_star_formation_3d</span></code>
+shows such an example, which is similar to
+<code class="docutils literal notranslate"><span class="pre">isolated_galaxy_collisionless_3d</span></code>, however this particular case
+includes gas and two galaxies interacting. Arepo, as every grid code,
+requires a finite extent of the simulation box as well as positive
+density at every point.  This is different from
+smoothed-particle-hydrodynamics simulations such as the ones performed
+with Gadget, where simply not placing gas particles in the initial
+conditions is an acceptable approach to treat low-density regions.
+The initial condition for <code class="docutils literal notranslate"><span class="pre">galaxy_merger_sfr_3d</span></code> are, for historic
+reasons, smoothed-particle-hydrodynamics initial conditions. To be
+able to use them in Arepo, the compile-time option
+<code class="docutils literal notranslate"><span class="pre">ADDBACKGROUNDGRID</span></code> was introduced.  With this option enabled, the
+code does not perform a simulation, but converts the SPH gas particles
+into a hierarchical oct-tree structure of cells.  Once this is done,
+the resulting output (using the specified box size) can be used for
+starting the actual simulation. Note that for this type of simulation,
+we do not provide the initial-condition generating code. Generally,
+using grid-code specific initial conditions is preferred over
+converting particle-based initial conditions, since the latter will
+always contain numerical noise which may degrade the quality of the
+simulation.</p>
+<p>Simulations may also be completely hydrodynamical, with no
+gravitational forces involved. One such example is the setup of the
+<code class="docutils literal notranslate"><span class="pre">Noh_3d</span></code> problem.  This example is an important test problem as it
+has an analytic solution, thus it is suitable for code
+verification. However, like for the more complex examples, we also
+here check against outcomes from previous code versions in order to
+ensure consistency.</p>
+</section>
+<section id="two-dimensional-simulations">
+<h2>Two-dimensional simulations<a class="headerlink" href="#two-dimensional-simulations" title="Permalink to this headline">¶</a></h2>
+<p>Two-dimensional simulations are often used as simplified examples
+which are significantly cheaper to run than their three-dimensional
+counterparts, and thus also very useful as test problems. Note that
+while the one-dimensional simulation code is in substantive parts
+detached from the rest, two-dimensional and three-dimensional
+simulations largely use the same routines. Thus these routines can be
+efficiently tested with 2d test problems.</p>
+<p>One example of such a test is <code class="docutils literal notranslate"><span class="pre">gresho_2d</span></code>, a stationary vortex
+problem for which the pressure gradient balances the centrifugal
+forces. The same is true for the Yee vortex, <code class="docutils literal notranslate"><span class="pre">yee_2d</span></code>, which has the
+advantage of being smooth in the hydrodynamic properties and therefore
+is better suited to determine the convergence order of the code. Both
+these tests are sensitive to accurate hydrodynamical modelling and
+gradient estimates.</p>
+<p>Other 2d test problems are <code class="docutils literal notranslate"><span class="pre">noh_2d</span></code>, a converging gas flow in 2d
+which introduces a strong shock and is a challenging problem for the
+Riemann solver, as well as <code class="docutils literal notranslate"><span class="pre">current_sheet_2d</span></code>, an MHD test probing
+numerical reconnection properties of the code.</p>
+</section>
+<section id="one-dimensional-simulations">
+<h2>One-dimensional simulations<a class="headerlink" href="#one-dimensional-simulations" title="Permalink to this headline">¶</a></h2>
+<p>Most of the one-dimensional simulations are test problems for
+particular solvers or numerical methods. Note that Arepo for the case
+of 1d problems is <strong>NOT</strong> MPI parallel, i.e. all the following
+examples can only be calculated using one MPI rank, i.e. in serial.
+Furthermore, refinement and derefinement is not supported in this
+case.</p>
+<p>One of the most basic one-dimensional examples is a simple linear wave
+propagation test as in the example <code class="docutils literal notranslate"><span class="pre">wave_1d</span></code>. Such a test is
+well-suited to test the convergence order of a scheme. For such
+applications it is important to ensure that both input/output and
+calculation are done in double precision by using the compile-time
+flags <code class="docutils literal notranslate"><span class="pre">INPUT_IN_DOUBLEPRECISION</span></code>, <code class="docutils literal notranslate"><span class="pre">OUTPUT_IN_DOUBLEPRECISION</span></code> and
+<code class="docutils literal notranslate"><span class="pre">DOUBLEPRECISION=1</span></code>.</p>
+<p>Another very important basic test is a 1d shocktube problem. Such a
+shocktube is calculated in the example <code class="docutils literal notranslate"><span class="pre">shocktube_1d</span></code>, where the
+time evolution can be compared to the exact solution. This tests both
+the Riemann solver as well as the gradient estimates and associated
+limiters. Similarly, <code class="docutils literal notranslate"><span class="pre">mhd_shocktube_1d</span></code> tests the time evolution of
+an MHD Riemann problem. Note that the verification in the latter case
+is only against a high-resolution simulation.</p>
+<p>One example of a more complex one-dimensional test problem is the
+example <code class="docutils literal notranslate"><span class="pre">interacting_blastwaves_1d</span></code>. This is checked against a
+high-resolution solution calculated on a fixed grid.</p>
+</section>
+<section id="one-dimensional-simulations-in-spherical-symmetry">
+<h2>One-dimensional simulations in spherical symmetry<a class="headerlink" href="#one-dimensional-simulations-in-spherical-symmetry" title="Permalink to this headline">¶</a></h2>
+<p>An important set of simulations for stellar astrophysics are one
+dimensional simulations in spherical symmetry, such as given for
+example in <code class="docutils literal notranslate"><span class="pre">polytrope_1d_spherical</span></code>. Generally, Arepo is not
+optimized for such kind of simulations and can only run these in
+serial. However, this option has proven to be useful for quick test
+simulations as well as for calculating radial profiles which can then
+be used as initial conditions for three dimensional simulations. One
+of the key aspects for these simulations is the quality of the
+boundary conditions. In the spherically symmetric mode, Arepo uses a
+reflective inner boundary condition and an inflow/outflow boundary
+condition at the outer end.</p>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Arepo</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="running.html">Getting started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Simulation examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#general-execution-structure-of-examples">General Execution Structure of Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cosmological-simulations">Cosmological Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cosmological-volumes">Cosmological volumes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cosmological-zoom-simulations">Cosmological zoom simulations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#initial-conditions-generation">Initial conditions generation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#newtonian-space">Newtonian space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#two-dimensional-simulations">Two-dimensional simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#one-dimensional-simulations">One-dimensional simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#one-dimensional-simulations-in-spherical-symmetry">One-dimensional simulations in spherical symmetry</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="config-options.html">Code Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameterfile.html">Parameterfile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="snapshotformat.html">Simulation output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="diagnosticfiles.html">Diagnostic output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="migration.html">Related codes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Code development</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="running.html" title="previous chapter">Getting started</a></li>
+      <li>Next: <a href="config-options.html" title="next chapter">Code Configuration</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Max-Planck Institute for Astrophysics.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/simtypes.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
